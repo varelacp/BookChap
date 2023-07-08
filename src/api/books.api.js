@@ -1,5 +1,7 @@
+import { searchBooks, getBookById } from './googleBooks.api';
 import axios from 'axios';
 const baseURL = `${import.meta.env.VITE_PROJECTS_API}/api`;
+
 
 // const setAuthorizationHeaders = () => {
 //   // set the JWT token in the headers for every request in this file
@@ -31,9 +33,7 @@ const baseURL = `${import.meta.env.VITE_PROJECTS_API}/api`;
 //   });
 // })();
 
-export const getAllBooks = () => {
-  return axios.get(`${baseURL}/books`);
-};
+
 
 export const getBook = id => {
   return axios.get(`${baseURL}/book/${id}`);
@@ -59,3 +59,24 @@ export const searchBookByISBN = (isbn) => {
     return axios.get(`${baseURL}/books/search/category/${category}`);
   };
   
+
+  export const upload = uploadData => {
+    return axios.post(`${baseURL}/upload`, uploadData);
+  };
+
+
+
+  export const saveBooks = async (books) => {
+    try {
+      // Send an HTTP POST request to the `/books/save` endpoint of your backend API
+      const response = await axios.post(`${baseURL}/books/save`, { books });
+      const savedBooks = response.data;
+  
+      return savedBooks;
+    } catch (error) {
+      console.log('An error occurred while saving the books:', error);
+      throw error;
+    }
+  };
+
+  export { searchBooks, getBookById};
