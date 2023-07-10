@@ -33,15 +33,21 @@ const baseURL = `${import.meta.env.VITE_PROJECTS_API}/api`;
 //   });
 // })();
 
-
+export const getAllBooks = () => {
+  return axios.get(`${baseURL}/Books`);
+};
 
 export const getBook = id => {
-  return axios.get(`${baseURL}/book/${id}`);
+  return axios.get(`${baseURL}/books/${id}`);
 };
 
 export const addBook = book => {
-  return axios.post(`${baseURL}/books/`, book);
+  console.log(book)
+  book.imgUrl = book.thumbnail;
+  book.apiId = book.id;
+  return axios.post(`${baseURL}/books`, book);
 };
+
 
 export const updateBook = updatedbook => {
   return axios.put(`${baseURL}/books/${updatedbook._id}`, updatedbook);

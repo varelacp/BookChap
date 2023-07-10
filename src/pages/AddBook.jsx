@@ -93,16 +93,20 @@ const AddBookPage = () => {
 export default AddBookPage;
  */
 
+
+
+
+
 import { useState } from 'react';
 import SearchBar from '../components/SearchBar';
-import { searchBooks } from '../api/googleBooks.api';
-import { addBook } from '../api/googleBooksToDB.api';
+import { addBook } from '../api/books.api';
+import { searchBooks } from '../api/googleBooksToDB.api';
 
 const AddBook = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBooks, setSelectedBooks] = useState([]);
 
-  const handleSearch = async (searchQuery) => {
+  const handleSearch = async searchQuery => {
     try {
       const books = await searchBooks(searchQuery);
       setSearchResults(books);
@@ -111,20 +115,28 @@ const AddBook = () => {
     }
   };
 
-  const handleBookSelect = (book) => {
-    setSelectedBooks((prevSelectedBooks) => [...prevSelectedBooks, book]);
+
+
+  const handleBookSelect = book => {
+    const selectedBook = {
+      ...book,
+      availability: false,
+      rentedBy: null,
+      imgUrl: book.thumbnail,
+     
+    };
+    setSelectedBooks(prevSelectedBooks => [...prevSelectedBooks, selectedBook]);
   };
 
   const handleSaveBooks = async () => {
     try {
-      // Save each selected book to the backend API
       for (const book of selectedBooks) {
+        // Add the book to the database
         await addBook(book);
       }
 
       console.log('Books saved successfully');
 
-      // Clear the selected books
       setSelectedBooks([]);
     } catch (error) {
       console.log('An error occurred while saving the books:', error);
@@ -138,21 +150,29 @@ const AddBook = () => {
       <SearchBar onSearch={handleSearch} />
 
       <h2>Search Results</h2>
-      {searchResults.map((book) => (
-        <div key={book.id}>
+      {searchResults.map((book, index) => (
+        <div key={`googleapi-${book.id}-${index}`}>
           <h3>{book.title}</h3>
-          <p>Author: {book.author}</p>
-          <p>Description: {book.description}</p>
+          {book.author && <p>Author: {book.author}</p>}
+          {book.description && <p>Description: {book.description}</p>}
+          {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
           <button onClick={() => handleBookSelect(book)}>Select</button>
         </div>
       ))}
+      {/* <h3>{book.title}</h3>
+          <p>Author: {book.authors?.join(', ')}</p>
+          <p>Description: {book.description}</p>
+          {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
+          <button onClick={() => handleBookSelect(book)}>Select</button>
+        </div>
+      ))} */}
 
-      <h2>Selected Books</h2>
-      {selectedBooks.map((book) => (
+      {selectedBooks.map(book => (
         <div key={book.id}>
           <h3>{book.title}</h3>
-          <p>Author: {book.author}</p>
+          <p>Author: {book.authors?.join(', ')}</p>
           <p>Description: {book.description}</p>
+          {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
         </div>
       ))}
 
@@ -162,4 +182,3 @@ const AddBook = () => {
 };
 
 export default AddBook;
-
