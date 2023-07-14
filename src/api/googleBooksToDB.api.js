@@ -1,72 +1,45 @@
-/* 
-import axios from 'axios';
-
-const baseURL = `${import.meta.env.VITE_PROJECTS_API}/api`;
-
-const axiosInstance = axios.create({
-  baseURL,
-});
-
-export const searchBooks = async (searchQuery) => {
-  try {
-    const response = await axiosInstance.get('/books/search', {
-      params: {
-        query: searchQuery,
-      },
-    });
-
-    const books = response.data;
-    return books;
-  } catch (error) {
-    console.log('An error occurred while searching for books:', error);
-    throw error;
-  }
-};
-
-export const addBook = async (book) => {
-  try {
-    const response = await axiosInstance.post('/books', book);
-    return response.data;
-  } catch (error) {
-    console.log('An error occurred while adding the book:', error);
-    throw error;
-  }
-};
-
-
- */
 
 import axios from 'axios';
+/* import { searchBooksByCategory, searchBookByISBN } from './books.api'; */
 
 const googleBooksAPI = axios.create({
   baseURL: 'https://www.googleapis.com/books/v1/'
 });
 
-export const searchBooks = async searchQuery => {
+export const searchBooks = async (searchQuery, category) => {
   try {
     const response = await googleBooksAPI.get('volumes', {
       params: {
-        q: searchQuery
+        q: `${searchQuery} ${category ? `subject:${category}` : ''}`,
       }
     });
+
+    console.log('Google Books API response:', response.data);
     console.log(response.data.items)
     // Process the response data from the Google Books API
     const books = response.data.items.map(item => {
       console.log(item)
       const { title, authors, description, imageLinks, industryIdentifiers, categories  } = item.volumeInfo;
+      console.log('Industry identifiers:', industryIdentifiers);
       const thumbnail = imageLinks?.thumbnail || '';
-      const category = categories ? categories[0] : undefined
-      const isbn = getISBN13(industryIdentifiers).identifier
+      const category = categories ? categories[0] : undefined;
+     const isbn = getISBN13(industryIdentifiers);
+
+
       return {
         title,
-        author: authors.join(', '),
+        author: authors,
         description,
         thumbnail,
         category,
         id: item.id,
         isbn
+    
       };
     });
+
+
+    console.log(books);
 
     return books;
   } catch (error) {
@@ -76,9 +49,13 @@ export const searchBooks = async searchQuery => {
 };
 
 
-const getISBN13 = (industryIdentifiers) => {
-  return industryIdentifiers.find(identifier => identifier.type === 'ISBN_13')
-}
+
+ const getISBN13 = (industryIdentifiers) => {
+  const isbn13Identifier = industryIdentifiers.find(
+    (identifier) => identifier.type === 'ISBN_13'
+  );
+  return isbn13Identifier ? isbn13Identifier.identifier : '';
+};  
 
 export const getBookById = async bookId => {
   try {

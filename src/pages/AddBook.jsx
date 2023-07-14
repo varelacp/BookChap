@@ -102,13 +102,15 @@ import SearchBar from '../components/SearchBar';
 import { addBook } from '../api/books.api';
 import { searchBooks } from '../api/googleBooksToDB.api';
 
+
 const AddBook = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBooks, setSelectedBooks] = useState([]);
 
-  const handleSearch = async searchQuery => {
+
+  const handleSearch = async (searchQuery, category) => {
     try {
-      const books = await searchBooks(searchQuery);
+      const books = await searchBooks(searchQuery, category);
       setSearchResults(books);
     } catch (error) {
       console.log('An error occurred while searching for books:', error);
@@ -123,7 +125,7 @@ const AddBook = () => {
       availability: false,
       rentedBy: null,
       imgUrl: book.thumbnail,
-     
+    
     };
     setSelectedBooks(prevSelectedBooks => [...prevSelectedBooks, selectedBook]);
   };
@@ -167,8 +169,8 @@ const AddBook = () => {
         </div>
       ))} */}
 
-      {selectedBooks.map(book => (
-        <div key={book.id}>
+      {selectedBooks.map((book, index) => (
+        <div key={index}>
           <h3>{book.title}</h3>
           <p>Author: {book.authors?.join(', ')}</p>
           <p>Description: {book.description}</p>
