@@ -3,20 +3,20 @@ import axios from 'axios';
 const baseURL = `${import.meta.env.VITE_PROJECTS_API}/api`;
 
 
-// const setAuthorizationHeaders = () => {
-//   // set the JWT token in the headers for every request in this file
-//   axios.interceptors.request.use(config => {
-//     // retrieve the JWT token from the local storage
-//     const storedToken = localStorage.getItem('authToken');
+const setAuthorizationHeaders = () => {
+  // set the JWT token in the headers for every request in this file
+  axios.interceptors.request.use(config => {
+    // retrieve the JWT token from the local storage
+    const storedToken = localStorage.getItem('authToken');
 
-//     if (storedToken) {
-//       config.headers = { Authorization: `Bearer ${storedToken}` };
-//     }
-//     return config;
-//   });
-// };
+    if (storedToken) {
+      config.headers = { Authorization: `Bearer ${storedToken}` };
+    }
+    return config;
+  });
+};
 
-// setAuthorizationHeaders();
+setAuthorizationHeaders();
 
 // self calling function
 // (() => {

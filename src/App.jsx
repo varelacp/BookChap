@@ -74,22 +74,17 @@ function App() {
             <Route
               path='/rentals'
               element={
-                <AdminAuthPrivate>
-                  {' '}
                   <UserAuthPrivate>
-                    <RentBook />{' '}
-                  </UserAuthPrivate>{' '}
-                </AdminAuthPrivate>
+                    <RentBook />
+                  </UserAuthPrivate>
               }
             />
             <Route
               path='/cart'
               element={
-                <AdminAuthPrivate>
                   <UserAuthPrivate>
                     <Cart />
                   </UserAuthPrivate>
-                </AdminAuthPrivate>
               }
             />
           </Route>

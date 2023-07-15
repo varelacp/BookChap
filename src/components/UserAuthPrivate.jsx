@@ -6,7 +6,7 @@ const UserAuthPrivate = props => {
   const { isLoggedIn, user } = useContext(AuthContext);
 
   // Check if the user is logged in and has the user role
-  if (isLoggedIn && user && user.role === 'user') {
+  if (isLoggedIn && user && (user.role === 'user' || user.role === 'admin')) {
     return props.children;
   } else {
     return <Navigate to='/login' />;
