@@ -9,14 +9,13 @@ import EditBook from './pages/EditBook';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import UserDashboard from './pages/UserDashboard';
-import AdminDashboard from './pages/AdminDashboard'
+import AdminDashboard from './pages/AdminDashboard';
 import { CartProvider } from './context/CartContext';
 import Cart from './components/Cart';
 import RentBook from './pages/RentBook';
 import UserAuthPrivate from './components/UserAuthPrivate';
 import AdminAuthPrivate from './components/AdminAuthPrivate';
 import IsAnon from './components/IsAnon';
-
 
 function App() {
   return (
@@ -50,7 +49,7 @@ function App() {
               element={
                 <IsAnon>
                   <Login />
-                  </IsAnon>
+                </IsAnon>
               }
             />
             <Route
@@ -58,8 +57,7 @@ function App() {
               element={
                 <IsAnon>
                   <Signup />
-                  </IsAnon>
-                
+                </IsAnon>
               }
             />
             <Route path='/user-dashboard' element={<UserDashboard />} />
@@ -74,17 +72,17 @@ function App() {
             <Route
               path='/rentals'
               element={
-                  <UserAuthPrivate>
-                    <RentBook />
-                  </UserAuthPrivate>
+                <UserAuthPrivate>
+                  <RentBook />
+                </UserAuthPrivate>
               }
             />
             <Route
               path='/cart'
               element={
-                  <UserAuthPrivate>
-                    <Cart />
-                  </UserAuthPrivate>
+                <UserAuthPrivate>
+                  <Cart />
+                </UserAuthPrivate>
               }
             />
           </Route>
