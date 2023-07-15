@@ -19,6 +19,7 @@ export const getActiveRentals = () => {
     };
     return axios.post(`${baseURL}/rentals`, rentalData);
   };
+
   
   export const returnBook = (rentalId) => {
     return axios.put(`${baseURL}/rentals/${rentalId}/return`);

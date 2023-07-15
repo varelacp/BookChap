@@ -67,7 +67,7 @@ function App() {
               path='/admin-dashboard'
               element={
                 <AdminAuthPrivate>
-                  <AdminDashboard />{' '}
+                  <AdminDashboard />
                 </AdminAuthPrivate>
               }
             />
