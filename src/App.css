@@ -1,0 +1,42 @@
+.App {
+  text-align: center;
+  min-height: 100vh;
+  max-height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  list-style: none;
+  color: black;
+}
+
+.Navbar {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  background: black;
+  color: white;
+  padding: 0px 20px;
+  box-shadow: 0px 1px 2px gray;
+  width: 100%;
+  margin-bottom: 15px;
+  padding: 5px;
+}
+
+.Navbar a {
+  list-style: none;
+  text-decoration: none;
+  display: inline-block;
+  margin: 0px 20px;
+  font-size: 1.2rem;
+  color: white;
+}
+
+.selected {
+  color: #fff;
+  border-bottom: rgba(255, 255, 255, 0.639) solid 2px;
+  padding-bottom: 5px;
+}
