@@ -17,6 +17,7 @@ Project Name: BookChap
 | /user-dashboard  | UserDashboardPage  | <Private>              | User performs actions on account                      |
 | /admin-dashboard | AdminDashboardPage | <Private>              | Admin performs actions on account                     |
 | /checkout        | checkoutPage       | anon only <AnonRoute>  | Checkout form navigates to user dashboard             |
+| /cart            | cartPage           | <Private>              | proceed to payment                                    |
 
 Components
 Pages:
@@ -48,6 +49,8 @@ Navbar
 IsAnon
 
 IsPrivate
+
+Cart
 
 # Server / Backend
 
