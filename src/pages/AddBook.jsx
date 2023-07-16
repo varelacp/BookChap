@@ -93,20 +93,14 @@ const AddBookPage = () => {
 export default AddBookPage;
  */
 
-
-
-
-
 import { useState } from 'react';
 import SearchBar from '../components/SearchBar';
 import { addBook } from '../api/books.api';
 import { searchBooks } from '../api/googleBooksToDB.api';
 
-
 const AddBook = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBooks, setSelectedBooks] = useState([]);
-
 
   const handleSearch = async (searchQuery, category) => {
     try {
@@ -117,15 +111,12 @@ const AddBook = () => {
     }
   };
 
-
-
   const handleBookSelect = book => {
     const selectedBook = {
       ...book,
       availability: false,
       rentedBy: null,
-      imgUrl: book.thumbnail,
-    
+      imgUrl: book.thumbnail
     };
     setSelectedBooks(prevSelectedBooks => [...prevSelectedBooks, selectedBook]);
   };
@@ -150,6 +141,7 @@ const AddBook = () => {
       <h1>Add Book</h1>
 
       <SearchBar onSearch={handleSearch} />
+      <button onClick={handleSaveBooks}>Save Books</button>
 
       <h2>Search Results</h2>
       {searchResults.map((book, index) => (
@@ -177,8 +169,6 @@ const AddBook = () => {
           {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
         </div>
       ))}
-
-      <button onClick={handleSaveBooks}>Save Books</button>
     </div>
   );
 };

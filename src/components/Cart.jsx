@@ -20,6 +20,7 @@ const Cart = () => {
           <ul>
             {cartItems.map((book, index) => (
               <li key={index}>
+                {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
                 <h3>{book.title}</h3>
                 <p>Author: {book.author[0]}</p>
                 <button onClick={() => handleRemoveFromCart(index)}>

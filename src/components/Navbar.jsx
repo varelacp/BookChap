@@ -23,6 +23,13 @@ const Navbar = () => {
         </NavLink>
 
         <NavLink
+          to='/about'
+          className={({ isActive }) => (isActive ? 'selected' : '')}
+        >
+          About
+        </NavLink>
+
+        <NavLink
           to='/books'
           className={({ isActive }) => (isActive ? 'selected' : '')}
         >

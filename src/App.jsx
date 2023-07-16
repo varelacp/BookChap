@@ -16,6 +16,7 @@ import RentBook from './pages/RentBook';
 import UserAuthPrivate from './components/UserAuthPrivate';
 import AdminAuthPrivate from './components/AdminAuthPrivate';
 import IsAnon from './components/IsAnon';
+import About from './pages/About';
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Routes>
           <Route>
             <Route path='/' element={<Home />} />
+            <Route path='/about' element={<About />} />
             <Route path='/books' element={<Books />} />
             <Route
               path='/book'

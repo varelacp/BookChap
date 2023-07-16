@@ -199,7 +199,10 @@ const CartProvider = props => {
     setCartItems(prevCart => {
       // Remove the book at the specified index from the cart
       const updatedCart = [...prevCart];
-      updatedCart.splice(index, 1);
+      const removedBook = updatedCart.splice(index, 1)[0];
+      if (removedBook) {
+        setItemCount(prevCount => prevCount - (removedBook.quantity || 1));
+      }
       return updatedCart;
     });
 

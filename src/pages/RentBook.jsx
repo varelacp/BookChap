@@ -3,13 +3,14 @@ import { CartContext } from '../context/CartContext';
 import { AuthContext } from '../context/auth.context';
 import { rentBook } from '../api/rentals.api';
 import { Link } from 'react-router-dom';
+import moment from 'moment';
 
 const RentBook = () => {
   const { user } = useContext(AuthContext);
   const userId = user ? user._id : null;
   const { selectedRentalBooks, clearCart } = useContext(CartContext);
   const [rentalData, setRentalData] = useState({
-    rentalDuration: 15 // Set the default rental duration to 15 days
+    rentalDuration: 30 // Set the default rental duration to 15 days
   });
 
   // const handleRentalSubmit = async e => {
@@ -78,17 +79,18 @@ const RentBook = () => {
 
       // Clear the selected rental books and rental data
       clearCart();
-      setRentalData({ rentalDuration: 15 });
+      setRentalData({ rentalDuration: 30 });
     } catch (error) {
       console.log('Error during rental:', error);
     }
   };
 
-  const calculateReturnDate = () => {
-    const rentalDuration = rentalData.rentalDuration;
-    const returnDate = new Date();
-    returnDate.setDate(returnDate.getDate() + rentalDuration);
-    return returnDate.toISOString();
+  const calculateReturnDate = rentalDuration => {
+    const rentalDate = new Date();
+    const returnDate = new Date(
+      rentalDate.getTime() + rentalDuration * 24 * 60 * 60 * 1000
+    );
+    return moment(returnDate).format('YYYY-MM-DD');
   };
 
   return (
@@ -113,7 +115,7 @@ const RentBook = () => {
 
         <button type='submit'>Rent</button>
       </form>
-      <p>Return Date: {new Date().toLocaleDateString()}</p>
+      <p>Return Date: {calculateReturnDate(rentalData.rentalDuration)}</p>
       <Link to='/payment'>Proceed to Payment</Link>
     </div>
   );

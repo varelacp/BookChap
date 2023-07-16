@@ -9,41 +9,8 @@ const RentBook = () => {
   const userId = user ? user._id : null;
   const { selectedRentalBooks, clearCart } = useContext(CartContext);
   const [rentalData, setRentalData] = useState({
-    rentalDuration: 15 // Set the default rental duration to 15 days
+    rentalDuration: 30 // Set the default rental duration to 15 days
   });
-
-  // const handleRentalSubmit = async e => {
-  //   e.preventDefault();
-  //   try {
-  //     console.log('User:', user);
-  //     console.log('User ID:', user._id);
-  //     // Perform the rental process for each selected book
-  //     for (const book of selectedRentalBooks) {
-  //       const rentalData = {
-  //         book: book._id,
-  //         user: userId,
-  //         rentalDate: new Date().toISOString(),
-  //         returnDate: calculateReturnDate()
-  //       };
-
-  //       console.log('Rental Data:', rentalData);
-
-  //       // Call the rental function or API to perform the rental
-  //       await rentBook(
-  //         rentalData.bookId,
-  //         rentalData.userId,
-  //         rentalData.rentalDate,
-  //         rentalData.returnDate
-  //       );
-  //       console.log('Rental created successfully for book:', book.title);
-  //     }
-
-  //     // Clear the selected rental books and rental data
-  //     setRentalData({ rentalDuration: 15 });
-  //   } catch (error) {
-  //     console.log('Error during rental:', error);
-  //   }
-  // };
 
   const handleRentalSubmit = async e => {
     e.preventDefault();
@@ -78,7 +45,7 @@ const RentBook = () => {
 
       // Clear the selected rental books and rental data
       clearCart();
-      setRentalData({ rentalDuration: 15 });
+      setRentalData({ rentalDuration: 30 });
     } catch (error) {
       console.log('Error during rental:', error);
     }
