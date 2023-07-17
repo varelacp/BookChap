@@ -93,8 +93,6 @@ const AuthProviderWrapper = props => {
 
 export { AuthContext, AuthProviderWrapper }; */
 
-
-
 import { createContext, useState, useEffect } from 'react';
 import {
   auth,
@@ -110,6 +108,7 @@ const AuthProviderWrapper = props => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const verifyUser = () => {
     auth.onAuthStateChanged(async user => {
@@ -127,6 +126,7 @@ const AuthProviderWrapper = props => {
           role: 'user',
           idToken: null
         });
+
         setIsLoggedIn(true);
         const authToken = await user.getIdToken();
         localStorage.setItem('authToken', authToken);
@@ -140,6 +140,9 @@ const AuthProviderWrapper = props => {
           role: claims.role,
           idToken: null
         });
+        if (claims.role === 'admin') {
+          setIsAdmin(true);
+        }
         setIsLoggedIn(true);
         const authToken = await user.getIdToken();
         localStorage.setItem('authToken', authToken);
@@ -195,7 +198,8 @@ const AuthProviderWrapper = props => {
         isLoading,
         user,
         logOutUser,
-        handleGoogleAuthentication
+        handleGoogleAuthentication,
+        isAdmin
       }}
     >
       <CartProvider>{props.children}</CartProvider>

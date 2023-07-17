@@ -4,7 +4,7 @@ import { Navigate } from 'react-router-dom';
 
 const AdminAuthPrivate = props => {
   const { isLoggedIn, user } = useContext(AuthContext);
-
+  console.log(user);
   // Check if the user is logged in and has the admin role
   if (isLoggedIn && user && user.role === 'admin') {
     return props.children;

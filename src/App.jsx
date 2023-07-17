@@ -17,6 +17,7 @@ import UserAuthPrivate from './components/UserAuthPrivate';
 import AdminAuthPrivate from './components/AdminAuthPrivate';
 import IsAnon from './components/IsAnon';
 import About from './pages/About';
+import UserRentals from './pages/UserRentals';
 
 function App() {
   return (
@@ -28,7 +29,14 @@ function App() {
           <Route>
             <Route path='/' element={<Home />} />
             <Route path='/about' element={<About />} />
-            <Route path='/books' element={<Books />} />
+            <Route
+              path='/books'
+              element={
+                <isAnon>
+                  <Books />{' '}
+                </isAnon>
+              }
+            />
             <Route
               path='/book'
               element={
@@ -62,7 +70,14 @@ function App() {
                 </IsAnon>
               }
             />
-            <Route path='/user-dashboard' element={<UserDashboard />} />
+            <Route
+              path='/user-dashboard'
+              element={
+                <UserAuthPrivate>
+                  <UserDashboard />{' '}
+                </UserAuthPrivate>
+              }
+            />
             <Route
               path='/admin-dashboard'
               element={
@@ -76,6 +91,15 @@ function App() {
               element={
                 <UserAuthPrivate>
                   <RentBook />
+                </UserAuthPrivate>
+              }
+            />
+            <Route
+              path='/users/:userId/rentals'
+              element={
+                <UserAuthPrivate>
+                  {' '}
+                  <UserRentals />{' '}
                 </UserAuthPrivate>
               }
             />

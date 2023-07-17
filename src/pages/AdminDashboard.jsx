@@ -34,7 +34,6 @@ const AdminDashboard = () => {
       <p>Profile Image: {dashboardData.profileImage}</p>
       <p>Address: {dashboardData.address}</p>
       <p>Phone Number: {dashboardData.phoneNumber}</p>
-      <p>Role: {dashboardData.role}</p>
 
       <button onClick={handleLogout}>Logout</button>
     </div>

@@ -69,6 +69,7 @@ const EditBook = () => {
           onChange={handleInputChange}
         />
       </div>
+
       <button onClick={handleUpdate}>Update Book</button>
     </div>
   );

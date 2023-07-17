@@ -194,6 +194,7 @@ const CartProvider = props => {
     // Add the book to the selectedRentalBooks
     setSelectedRentalBooks(prevBooks => [...prevBooks, book]);
   };
+  // Update the item count whenever selectedRentalBooks changes
 
   const handleRemoveFromCart = index => {
     setCartItems(prevCart => {

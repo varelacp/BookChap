@@ -5,7 +5,7 @@ import { AuthContext } from '../context/auth.context';
 
 const Navbar = () => {
   const { itemCount } = useContext(CartContext);
-  const { isLoggedIn, logOutUser } = useContext(AuthContext);
+  const { isLoggedIn, logOutUser, isAdmin } = useContext(AuthContext);
 
   return (
     <nav className='Navbar'>
@@ -44,6 +44,22 @@ const Navbar = () => {
             >
               Cart ({itemCount})
             </NavLink>
+            {isAdmin ? (
+              <NavLink
+                to='/admin-dashboard'
+                className={({ isActive }) => (isActive ? 'selected' : '')}
+              >
+                Admin Dashboard
+              </NavLink>
+            ) : (
+              <NavLink
+                to='/user-dashboard'
+                className={({ isActive }) => (isActive ? 'selected' : '')}
+              >
+                User Dashboard
+              </NavLink>
+            )}
+
             <button onClick={logOutUser}>Logout</button>
           </>
         )}
