@@ -36,7 +36,7 @@ const Navbar = () => {
           Books
         </NavLink>
 
-        {isLoggedIn && (
+        {isLoggedIn && !isAdmin && (
           <>
             <NavLink
               to='/cart'
@@ -44,22 +44,24 @@ const Navbar = () => {
             >
               Cart ({itemCount})
             </NavLink>
-            {isAdmin ? (
-              <NavLink
-                to='/admin-dashboard'
-                className={({ isActive }) => (isActive ? 'selected' : '')}
-              >
-                Admin Dashboard
-              </NavLink>
-            ) : (
-              <NavLink
-                to='/user-dashboard'
-                className={({ isActive }) => (isActive ? 'selected' : '')}
-              >
-                User Dashboard
-              </NavLink>
-            )}
+            <NavLink
+              to='/user-dashboard'
+              className={({ isActive }) => (isActive ? 'selected' : '')}
+            >
+              User Dashboard
+            </NavLink>
+            <button onClick={logOutUser}>Logout</button>
+          </>
+        )}
 
+        {isLoggedIn && isAdmin && (
+          <>
+            <NavLink
+              to='/admin-dashboard'
+              className={({ isActive }) => (isActive ? 'selected' : '')}
+            >
+              Admin Dashboard
+            </NavLink>
             <button onClick={logOutUser}>Logout</button>
           </>
         )}

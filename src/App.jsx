@@ -29,14 +29,7 @@ function App() {
           <Route>
             <Route path='/' element={<Home />} />
             <Route path='/about' element={<About />} />
-            <Route
-              path='/books'
-              element={
-                <isAnon>
-                  <Books />{' '}
-                </isAnon>
-              }
-            />
+            <Route path='/books' element={<Books />} />
             <Route
               path='/book'
               element={

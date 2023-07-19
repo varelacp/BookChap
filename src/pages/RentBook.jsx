@@ -87,7 +87,6 @@ const RentBook = () => {
       </ul>
       <h2>Rental Form:</h2>
       <form onSubmit={handleRentalSubmit}>
-        {/* Display book information, including thumbnail */}
         {selectedRentalBooks.map((book, index) => (
           <div key={index}>
             {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
