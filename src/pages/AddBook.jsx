@@ -93,20 +93,15 @@ const AddBookPage = () => {
 export default AddBookPage;
  */
 
-
-
-
-
-import { useState } from 'react';
+import {useState} from 'react';
 import SearchBar from '../components/SearchBar';
-import { addBook } from '../api/books.api';
-import { searchBooks } from '../api/googleBooksToDB.api';
-
+import {addBook} from '../api/books.api';
+import {searchBooks} from '../api/googleBooksToDB.api';
+import {FormattedNumber} from 'react-intl';
 
 const AddBook = () => {
   const [searchResults, setSearchResults] = useState([]);
   const [selectedBooks, setSelectedBooks] = useState([]);
-
 
   const handleSearch = async (searchQuery, category) => {
     try {
@@ -117,17 +112,39 @@ const AddBook = () => {
     }
   };
 
-
-
   const handleBookSelect = book => {
+    const rentalPrice = getRentalPrice(book.category);
     const selectedBook = {
       ...book,
       availability: false,
       rentedBy: null,
-      imgUrl: book.thumbnail,
-    
+      rentalPrice: rentalPrice,
+      imgUrl: book.thumbnail
     };
     setSelectedBooks(prevSelectedBooks => [...prevSelectedBooks, selectedBook]);
+  };
+
+  const getRentalPrice = category => {
+    switch (category) {
+      case 'Fiction':
+        return 10;
+      case 'Non-fiction':
+        return 12;
+      case 'Science Fiction':
+        return 15;
+      case 'Mystery':
+        return 11;
+      case 'Romance':
+        return 9;
+      case 'Fantasy':
+        return 14;
+      case 'Thriller':
+        return 13;
+      case 'Travel':
+        return 8;
+      default:
+        return 0;
+    }
   };
 
   const handleSaveBooks = async () => {
@@ -175,6 +192,14 @@ const AddBook = () => {
           <p>Author: {book.authors?.join(', ')}</p>
           <p>Description: {book.description}</p>
           {book.thumbnail && <img src={book.thumbnail} alt={book.title} />}
+          <p>
+            Rental Price:{' '}
+            <FormattedNumber
+              style='currency'
+              currency='EUR'
+              value={getRentalPrice(book.category)}
+            />
+          </p>
         </div>
       ))}
 

@@ -70,7 +70,7 @@ IsPrivate
 | Method | Route                   | Description                         |
 | ------ | ----------------------- | ----------------------------------- |
 | GET    | /api/rentals/active     | Retrieves all rentals for the admin |
-| GET    | /users/:userId/rentals  | Retrieves user's rentals            |
+| GET    | api/users/:userId/rentals  | Retrieves user's rentals            |
 | POST   | /api/rentals            | Rent a New Book                     |
 | PUT    | /api/rentals/:id/return | Return a book by the user           |
 

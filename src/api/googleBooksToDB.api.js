@@ -1,4 +1,3 @@
-
 import axios from 'axios';
 /* import { searchBooksByCategory, searchBookByISBN } from './books.api'; */
 
@@ -10,21 +9,25 @@ export const searchBooks = async (searchQuery, category) => {
   try {
     const response = await googleBooksAPI.get('volumes', {
       params: {
-        q: `${searchQuery} ${category ? `subject:${category}` : ''}`,
+        q: `${searchQuery} ${category ? `subject:${category}` : ''}`
       }
     });
 
     console.log('Google Books API response:', response.data);
-    console.log(response.data.items)
+    console.log(response.data.items);
     // Process the response data from the Google Books API
     const books = response.data.items.map(item => {
-      console.log(item)
-      const { title, authors, description, imageLinks, industryIdentifiers, categories  } = item.volumeInfo;
-      console.log('Industry identifiers:', industryIdentifiers);
+      const {
+        title,
+        authors,
+        description,
+        imageLinks,
+        industryIdentifiers,
+        categories
+      } = item.volumeInfo;
       const thumbnail = imageLinks?.thumbnail || '';
       const category = categories ? categories[0] : undefined;
-     const isbn = getISBN13(industryIdentifiers);
-
+      const isbn = getISBN13(industryIdentifiers);
 
       return {
         title,
@@ -34,10 +37,8 @@ export const searchBooks = async (searchQuery, category) => {
         category,
         id: item.id,
         isbn
-    
       };
     });
-
 
     console.log(books);
 
@@ -48,20 +49,18 @@ export const searchBooks = async (searchQuery, category) => {
   }
 };
 
-
-
- const getISBN13 = (industryIdentifiers) => {
+const getISBN13 = industryIdentifiers => {
   const isbn13Identifier = industryIdentifiers.find(
-    (identifier) => identifier.type === 'ISBN_13'
+    identifier => identifier.type === 'ISBN_13'
   );
   return isbn13Identifier ? isbn13Identifier.identifier : '';
-};  
+};
 
 export const getBookById = async bookId => {
   try {
     const response = await googleBooksAPI.get(`volumes/${bookId}`);
     const bookData = response.data.volumeInfo;
-    const { thumbnail } = bookData.imageLinks ?? {};
+    const {thumbnail} = bookData.imageLinks ?? {};
 
     const book = {
       title: bookData.title,

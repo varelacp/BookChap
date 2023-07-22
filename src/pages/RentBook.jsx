@@ -1,119 +1,63 @@
-import { useContext, useState } from 'react';
-import { CartContext } from '../context/CartContext';
-import { AuthContext } from '../context/auth.context';
-import { rentBook } from '../api/rentals.api';
-import { Link } from 'react-router-dom';
+import {useContext, useState} from 'react';
+import {AuthContext} from '../context/auth.context';
+import {CartContext} from '../context/CartContext';
+import {rentBook} from '../api/rentals.api';
+import {Link, useNavigate} from 'react-router-dom';
+import {ToastContainer, toast} from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const RentBook = () => {
-  const { user } = useContext(AuthContext);
-  const userId = user ? user._id : null;
-  const { selectedRentalBooks, clearCart } = useContext(CartContext);
-  const [rentalData, setRentalData] = useState({
-    rentalDuration: 15 // Set the default rental duration to 15 days
-  });
+  const {user} = useContext(AuthContext);
+  const {cartItems, clearCart} = useContext(CartContext);
+  const [rentalDuration, setRentalDuration] = useState(30); // Set the default rental duration to 30 days
+  const navigate = useNavigate();
 
-  // const handleRentalSubmit = async e => {
-  //   e.preventDefault();
-  //   try {
-  //     console.log('User:', user);
-  //     console.log('User ID:', user._id);
-  //     // Perform the rental process for each selected book
-  //     for (const book of selectedRentalBooks) {
-  //       const rentalData = {
-  //         book: book._id,
-  //         user: userId,
-  //         rentalDate: new Date().toISOString(),
-  //         returnDate: calculateReturnDate()
-  //       };
-
-  //       console.log('Rental Data:', rentalData);
-
-  //       // Call the rental function or API to perform the rental
-  //       await rentBook(
-  //         rentalData.bookId,
-  //         rentalData.userId,
-  //         rentalData.rentalDate,
-  //         rentalData.returnDate
-  //       );
-  //       console.log('Rental created successfully for book:', book.title);
-  //     }
-
-  //     // Clear the selected rental books and rental data
-  //     setRentalData({ rentalDuration: 15 });
-  //   } catch (error) {
-  //     console.log('Error during rental:', error);
-  //   }
-  // };
-
-  const handleRentalSubmit = async e => {
-    e.preventDefault();
+  const handleRentBook = async () => {
     try {
-      console.log('User:', user);
-      console.log('User ID:', user._id);
-      // Perform the rental process for each selected book
-      for (const book of selectedRentalBooks) {
-        const rentalData = {
-          book: book._id,
-          user: userId,
-          rentalDate: new Date().toISOString(),
-          returnDate: calculateReturnDate()
-        };
+      for (const book of cartItems) {
+        const rentalDate = new Date();
+        const returnDate = new Date();
+        returnDate.setDate(returnDate.getDate() + rentalDuration);
 
-        console.log('Rental Data:', rentalData);
-
-        // Call the rental function or API to perform the rental
-        const response = await rentBook(
-          rentalData.book,
-          rentalData.user,
-          rentalData.rentalDate,
-          rentalData.returnDate
+        // calcularcem unix
+        await rentBook(
+          book._id,
+          user._id,
+          rentalDate.toISOString(),
+          returnDate.toISOString()
         );
 
-        // Access the newly created rental from the server response
-        const newRental = response.data;
-
-        console.log('Rental created successfully for book:', book.title);
-        console.log('New Rental:', newRental);
+        // show success message for each book rented successfully
+        toast.success(`Successfully rented ${book.title}`);
       }
 
-      // Clear the selected rental books and rental data
-      clearCart();
-      setRentalData({ rentalDuration: 15 });
-    } catch (error) {
-      console.log('Error during rental:', error);
-    }
-  };
+      // Clear cart after successfully renting all books
+      clearCart(user._id);
 
-  const calculateReturnDate = () => {
-    const rentalDuration = rentalData.rentalDuration;
-    const returnDate = new Date();
-    returnDate.setDate(returnDate.getDate() + rentalDuration);
-    return returnDate.toISOString();
+      // Reset rental duration
+      setRentalDuration(30);
+
+      // Navigate to user dashboard after successful rental
+      navigate('/user-dashboard');
+    } catch (error) {
+      console.error('Failed to rent books:', error);
+      // show error message
+      toast.error(`Failed to rent books: ${error.message}`);
+    }
   };
 
   return (
     <div>
-      <h1>Rent Book</h1>
-      <h2>Selected Books:</h2>
-      <ul>
-        {selectedRentalBooks.map((book, index) => (
-          <li key={index}>{book.title}</li>
-        ))}
-      </ul>
-      <h2>Rental Form:</h2>
-      <form onSubmit={handleRentalSubmit}>
-        {/* Display book information, including thumbnail */}
-        {selectedRentalBooks.map((book, index) => (
-          <div key={index}>
-            {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
-            <h3>{book.title}</h3>
-            <p>Author: {book.author}</p>
-          </div>
-        ))}
-
-        <button type='submit'>Rent</button>
-      </form>
-      <p>Return Date: {new Date().toLocaleDateString()}</p>
+      <ToastContainer />
+      <h1>Rent Books</h1>
+      {cartItems.map((book, index) => (
+        <div key={index}>
+          <img src={book.imgUrl} alt={book.title} />
+          <h3>{book.title}</h3>
+          <p>Author: {book.author}</p>
+        </div>
+      ))}
+      <button onClick={handleRentBook}>Rent Book</button>
       <Link to='/payment'>Proceed to Payment</Link>
     </div>
   );

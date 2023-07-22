@@ -166,19 +166,21 @@ const Books = () => {
 
 export default Books; */
 
+import {Link} from 'react-router-dom';
+import {useContext, useEffect, useState} from 'react';
+import {getAllBooks} from '../api/books.api';
+import {FormattedNumber, IntlProvider} from 'react-intl';
+import {CartContext, CartProvider} from '../context/CartContext';
+import {AuthContext} from '../context/auth.context';
 
-import { Link } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
-import { getAllBooks } from '../api/books.api';
-import { FormattedNumber, IntlProvider } from 'react-intl';
-import { CartContext, CartProvider } from '../context/CartContext';
 import SearchBar from '../components/SearchBar';
 
 const Books = () => {
   const [mongodbBooks, setMongodbBooks] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredBooks, setFilteredBooks] = useState([]);
-  const { addToCart } = useContext(CartContext);
+  const {addToCart} = useContext(CartContext);
+  const {user} = useContext(AuthContext);
 
   useEffect(() => {
     const fetchBooks = async () => {
@@ -203,8 +205,9 @@ const Books = () => {
     setFilteredBooks(filtered);
   };
 
-  const handleAddToCart = book => {
-    addToCart(book);
+  const handleAddToCart = (e, book) => {
+    e.preventDefault();
+    addToCart(user._id, book._id);
   };
 
   const getRentalPrice = category => {
@@ -241,7 +244,9 @@ const Books = () => {
             <div key={book._id}>
               {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
               <h3>{book.title}</h3>
-              <button onClick={() => handleAddToCart(book)}>Add to Cart</button>
+              <button onClick={e => handleAddToCart(e, book)}>
+                Add to Cart
+              </button>
               <p>Author: {book.author}</p>
               <p>
                 Rental Price:{' '}

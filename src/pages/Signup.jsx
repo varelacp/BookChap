@@ -8,6 +8,7 @@ const Signup = () => {
   const [password, setPassword] = useState('');
   const [name, setName] = useState('');
   const [role, setRole] = useState('user');
+  const [address, setAddress] = useState('')
   const [errorMessage, setErrorMessage] = useState(undefined);
 
   const { handleGoogleAuthentication } = useContext(AuthContext);
@@ -25,15 +26,15 @@ const Signup = () => {
     setName(e.target.value);
   };
 
-  const handleRole = e => {
-    setRole(e.target.value);
+  const handleAddress = e => {
+    setAddress(e.target.value);
   }
 
   const handleSubmit = async e => {
     e.preventDefault();
 
     try {
-      const user = { email, password, name };
+      const user = { email, password, name, address, role };
       await signup(user);
       navigate('/login');
     } catch (error) {
@@ -43,15 +44,11 @@ const Signup = () => {
     }
   };
 
-   const roleOptions = (
-    <>
-      {role === 'admin' ? (
-        <option value="admin">Admin</option>
-      ) : (
-        <option value="user">User</option>
-      )}
-    </>
+  const handleRole= e => (
+   setRole(e.target.value)
   );
+
+
 
   return (
     <div className='SignupPage'>
@@ -72,11 +69,18 @@ const Signup = () => {
         <label>Name:</label>
         <input type='text' name='name' value={name} onChange={handleName} />
 
+        <label>Address:</label>
+        <input type='text' name='address' value={address} onChange={handleAddress} />
 
-        <label>Role</label>
+        <label>Role:</label>
         <select value={role} onChange={handleRole}>
-          {roleOptions}
+          <option value="isUser">User</option>
+          <option value="isAdmin">Admin</option>
         </select>
+
+
+
+
 
         <button type='submit'>Sign Up</button>
       </form>

@@ -1,22 +1,23 @@
-import React from 'react'
-import ReactDOM from 'react-dom/client'
-import App from './App.jsx'
-import './index.css'
-import { BrowserRouter as Router } from 'react-router-dom'
+import React from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './App.jsx';
+import './index.css';
+import {BrowserRouter as Router} from 'react-router-dom';
 import 'react-toastify/dist/ReactToastify.css';
-import { AuthProviderWrapper } from './context/auth.context.jsx'
-import { CartProvider } from './context/CartContext.jsx'
-
+import {AuthProviderWrapper} from './context/auth.context.jsx';
+import {CartProvider} from './context/CartContext.jsx';
+import {ChakraProvider} from '@chakra-ui/react';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Router> 
-      <CartProvider>
-
+    <Router>
       <AuthProviderWrapper>
-    <App />
+        <CartProvider>
+          <ChakraProvider>
+            <App />
+          </ChakraProvider>
+        </CartProvider>
       </AuthProviderWrapper>
-      </CartProvider>
     </Router>
-  </React.StrictMode>,
-)
+  </React.StrictMode>
+);

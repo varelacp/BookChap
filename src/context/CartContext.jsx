@@ -1,161 +1,120 @@
-/* import { createContext, useState } from 'react';
+// import { createContext, useState } from 'react';
+
+// const CartContext = createContext();
+
+// const CartProvider = props => {
+//   const [cartItems, setCartItems] = useState([]);
+//   const [selectedRentalBooks, setSelectedRentalBooks] = useState([]);
+//   const [itemCount, setItemCount] = useState(0);
+
+//   const addToCart = book => {
+//     // Add the book to the cart
+//     setCartItems(prevCart => [...prevCart, book]);
+//     setItemCount(prevCount => prevCount + 1); // Increment item count
+
+//     // Add the book to the selectedRentalBooks
+//     setSelectedRentalBooks(prevBooks => [...prevBooks, book]);
+//   };
+
+//   const handleRemoveFromCart = index => {
+//     setCartItems(prevCart => {
+//       const updatedCart = [...prevCart];
+//       const removedBook = updatedCart.splice(index, 1)[0]; // Remove the book at the specified index
+//       if (removedBook) {
+//         setItemCount(prevCount => prevCount - (removedBook.quantity || 1));
+//       }
+
+//       return updatedCart;
+//     });
+
+//     setSelectedRentalBooks(prevBooks => {
+//       // Remove the book at the specified index from the selectedRentalBooks
+//       const updatedBooks = [...prevBooks];
+//       updatedBooks.splice(index, 1);
+//       return updatedBooks;
+//     });
+//   };
+
+//   const clearCart = () => {
+//     setCartItems([]);
+//     setSelectedRentalBooks([]);
+//   };
+
+//   return (
+//     <CartContext.Provider
+//       value={{
+//         cartItems,
+//         selectedRentalBooks,
+//         addToCart,
+//         handleRemoveFromCart,
+//         itemCount,
+//         clearCart
+//       }}
+//     >
+//       {props.children}
+//     </CartContext.Provider>
+//   );
+// };
+
+// export { CartContext, CartProvider };
+
+import {createContext, useState, useEffect, useContext} from 'react';
+import {
+  addToCart as addToCartApi,
+  getCartItems as getCartItemsApi,
+  removeFromCart as removeFromCartApi,
+  clearCart as clearCartApi
+} from '../api/cart.api';
+import {AuthContext} from './auth.context';
 
 const CartContext = createContext();
 
-const CartProvider = props => {
-  const [cartItems, setCartItems] = useState([]);
-  const [selectedRentalBooks, setSelectedRentalBooks] = useState([]);
-  const [itemCount, setItemCount] = useState(0);
-
-  const addToCart = book => {
-    // Add the book to the cart
-    setCartItems(prevCart => [...prevCart, book]);
-    setItemCount(prevCount => prevCount + 1); // Increment item count
-
-    // Add the book to the selectedRentalBooks
-    setSelectedRentalBooks(prevBooks => [...prevBooks, book]);
-  };
-
-  const handleRemoveFromCart = index => {
-    setCartItems(prevCart => {
-      // Remove the book at the specified index from the cart
-      const updatedCart = [...prevCart];
-      updatedCart.splice(index, 1);
-      return updatedCart;
-    });
-
-    setSelectedRentalBooks(prevBooks => {
-      // Remove the book at the specified index from the selectedRentalBooks
-      const updatedBooks = [...prevBooks];
-      updatedBooks.splice(index, 1);
-      return updatedBooks;
-    });
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    setSelectedRentalBooks([]);
-  };
-
-  return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        selectedRentalBooks,
-        addToCart,
-        handleRemoveFromCart,
-        itemCount,
-        clearCart
-      }}
-    >
-      {props.children}
-    </CartContext.Provider>
-  );
-};
-
-export { CartContext, CartProvider };
-
- */
-
-// here the first working option
-/* import { createContext, useState } from 'react';
-
-const CartContext = createContext();
-
-const CartProvider = props => {
-  const [cartItems, setCartItems] = useState([]);
-  const [selectedRentalBooks, setSelectedRentalBooks] = useState([]);
-  const [itemCount, setItemCount] = useState(0);
-
-  const addToCart = book => {
-    // Add the book to the cart
-    setCartItems(prevCart => [...prevCart, book]);
-    setItemCount(prevCount => prevCount + 1); // Increment item count
-
-    // Add the book to the selectedRentalBooks
-    setSelectedRentalBooks(prevBooks => [...prevBooks, book]);
-  };
-
-  const handleRemoveFromCart = index => {
-    setCartItems(prevCart => {
-      // Remove the book at the specified index from the cart
-      const updatedCart = [...prevCart];
-      updatedCart.splice(index, 1);
-      return updatedCart;
-    });
-
-    setSelectedRentalBooks(prevBooks => {
-      // Remove the book at the specified index from the selectedRentalBooks
-      const updatedBooks = [...prevBooks];
-      updatedBooks.splice(index, 1);
-      return updatedBooks;
-    });
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    setSelectedRentalBooks([]);
-  };
-
-  return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        selectedRentalBooks,
-        addToCart,
-        handleRemoveFromCart,
-        itemCount,
-        clearCart
-      }}
-    >
-      {props.children}
-    </CartContext.Provider>
-  );
-};
-
-export { CartContext, CartProvider };
- */
-
-/* 
-import { createContext, useState } from 'react';
-import { cart } from '../api/rentals.api';
-
-const CartContext = createContext();
-
-const CartProvider = props => {
+const CartProvider = ({children}) => {
   const [cartItems, setCartItems] = useState([]);
   const [itemCount, setItemCount] = useState(0);
+  const {user} = useContext(AuthContext);
 
-  const addToCart = book => {
-    // Add the book to the cart
-    setCartItems(prevCart => [...prevCart, book]);
-    setItemCount(prevCount => prevCount + 1); // Increment item count
-  };
+  useEffect(() => {
+    user && fetchCartItems(user._id);
+  }, [user]);
 
-  const handleRemoveFromCart = index => {
-    setCartItems(prevCart => {
-      // Remove the book at the specified index from the cart
-      const updatedCart = [...prevCart];
-      updatedCart.splice(index, 1);
-      return updatedCart;
-    });
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-  };
-
-  const handleCheckout = async () => {
+  const fetchCartItems = async userId => {
     try {
-      // Perform the checkout process
-      await cart(cartItems);
-
-      // Clear the cart items after successful checkout
-      clearCart();
-
-      // Perform any additional actions after checkout, such as navigation or showing a success message
+      const response = await getCartItemsApi(userId);
+      setCartItems(response.data.cartItems);
+      setItemCount(response.data.cartItems.length);
     } catch (error) {
-      console.log('Error during checkout:', error);
+      console.log('Error fetching cart items:', error);
+    }
+  };
+
+  const addToCart = async (userId, bookId) => {
+    try {
+      await addToCartApi(userId, bookId);
+      setItemCount(prevCount => prevCount + 1);
+      fetchCartItems(user._id);
+    } catch (error) {
+      console.log('Error adding to cart:', error);
+    }
+  };
+
+  const removeFromCart = async (userId, bookId) => {
+    try {
+      await removeFromCartApi(userId, bookId);
+      setItemCount(prevCount => prevCount - 1);
+      fetchCartItems(user._id);
+    } catch (error) {
+      console.log('Error removing from cart:', error);
+    }
+  };
+
+  const clearCart = async userId => {
+    try {
+      await clearCartApi(userId);
+      setCartItems([]);
+      setItemCount(0);
+    } catch (error) {
+      console.log('Error clearing cart:', error);
     }
   };
 
@@ -164,72 +123,13 @@ const CartProvider = props => {
       value={{
         cartItems,
         addToCart,
-        handleRemoveFromCart,
-        itemCount,
+        removeFromCart,
         clearCart,
-        handleCheckout
-      }}
-    >
-      {props.children}
+        itemCount
+      }}>
+      {children}
     </CartContext.Provider>
   );
 };
 
-export { CartContext, CartProvider };
- */
-import { createContext, useState } from 'react';
-
-const CartContext = createContext();
-
-const CartProvider = props => {
-  const [cartItems, setCartItems] = useState([]);
-  const [selectedRentalBooks, setSelectedRentalBooks] = useState([]);
-  const [itemCount, setItemCount] = useState(0);
-
-  const addToCart = book => {
-    // Add the book to the cart
-    setCartItems(prevCart => [...prevCart, book]);
-    setItemCount(prevCount => prevCount + 1); // Increment item count
-
-    // Add the book to the selectedRentalBooks
-    setSelectedRentalBooks(prevBooks => [...prevBooks, book]);
-  };
-
-  const handleRemoveFromCart = index => {
-    setCartItems(prevCart => {
-      // Remove the book at the specified index from the cart
-      const updatedCart = [...prevCart];
-      updatedCart.splice(index, 1);
-      return updatedCart;
-    });
-
-    setSelectedRentalBooks(prevBooks => {
-      // Remove the book at the specified index from the selectedRentalBooks
-      const updatedBooks = [...prevBooks];
-      updatedBooks.splice(index, 1);
-      return updatedBooks;
-    });
-  };
-
-  const clearCart = () => {
-    setCartItems([]);
-    setSelectedRentalBooks([]);
-  };
-
-  return (
-    <CartContext.Provider
-      value={{
-        cartItems,
-        selectedRentalBooks,
-        addToCart,
-        handleRemoveFromCart,
-        itemCount,
-        clearCart
-      }}
-    >
-      {props.children}
-    </CartContext.Provider>
-  );
-};
-
-export { CartContext, CartProvider };
+export {CartContext, CartProvider};
