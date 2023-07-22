@@ -15,15 +15,30 @@ const RentBook = () => {
   const handleRentBook = async () => {
     try {
       for (const book of cartItems) {
-        const rentalDate = new Date();
+        const rentalDate = new Date(Date.now());
         const returnDate = new Date();
-        returnDate.setDate(returnDate.getDate() + rentalDuration);
+        const copy = returnDate;
+        copy.setDate(rentalDate.getDate() + rentalDuration);
+        console.log(returnDate);
+        // const rentalDate = new Date(); // Current date
+        // let rentalDurationInMilliseconds = rentalDuration * 24 * 60 * 60 * 1000; // Conversion of days to milliseconds
+        // let returnDateInMilliseconds =
+        //   rentalDate.getTime() + rentalDurationInMilliseconds; // Adding rental duration to the current time
+        // let returnDate = new Date(returnDateInMilliseconds);
+        // let returnDateUTC = new Date(
+        //   Date.UTC(
+        //     returnDate.getFullYear(),
+        //     returnDate.getMonth(),
+        //     returnDate.getDate()
+        //   )
+        // );
 
         await rentBook(
           book._id,
           user._id,
-          rentalDate.toISOString(),
-          returnDate.toISOString()
+          rentalDate,
+          copy
+          // returnDateUTC.toISOString()
         );
 
         // show success message for each book rented successfully
