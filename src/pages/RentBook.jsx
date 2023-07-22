@@ -19,7 +19,6 @@ const RentBook = () => {
         const returnDate = new Date();
         returnDate.setDate(returnDate.getDate() + rentalDuration);
 
-        // calcularcem unix
         await rentBook(
           book._id,
           user._id,
@@ -45,20 +44,6 @@ const RentBook = () => {
       toast.error(`Failed to rent books: ${error.message}`);
     }
   };
-
-  // const calculateReturnDate = rentalDuration => {
-  //   const rentalDate = new Date();
-  //   const returnDate = new Date();
-  //   returnDate.setTime(
-  //     rentalDate.getTime() + rentalDuration * 24 * 60 * 60 * 1000
-  //   );
-  //   return moment(returnDate).format('YYYY-MM-DD');
-  // };
-
-  // Check if the cart is empty
-  if (selectedRentalBooks.length === 0) {
-    return <p>The cart is empty.</p>;
-  }
 
   return (
     <div>
