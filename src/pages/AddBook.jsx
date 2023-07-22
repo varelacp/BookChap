@@ -167,6 +167,7 @@ const AddBook = () => {
       <h1>Add Book</h1>
 
       <SearchBar onSearch={handleSearch} />
+      <button onClick={handleSaveBooks}>Save Books</button>
 
       <h2>Search Results</h2>
       {searchResults.map((book, index) => (
@@ -202,8 +203,6 @@ const AddBook = () => {
           </p>
         </div>
       ))}
-
-      <button onClick={handleSaveBooks}>Save Books</button>
     </div>
   );
 };

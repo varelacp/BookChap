@@ -1,11 +1,11 @@
-import { createContext, useState, useEffect } from 'react';
+import {createContext, useState, useEffect} from 'react';
 import {
   auth,
   getAdditionalInfo,
   signInWithGoogle
 } from '../config/firebase.config';
-import { signupGoogle } from '../api/auth.api';
-import { CartProvider } from '../context/CartContext';
+import {signupGoogle} from '../api/auth.api';
+import {CartProvider} from '../context/CartContext';
 
 const AuthContext = createContext();
 
@@ -36,7 +36,7 @@ const AuthProviderWrapper = props => {
         const authToken = await user.getIdToken();
         localStorage.setItem('authToken', authToken);
       } else {
-        const { claims } = await user.getIdTokenResult();
+        const {claims} = await user.getIdTokenResult();
         console.log('Claims', claims);
         setUser({
           _id: user.uid,
@@ -51,7 +51,7 @@ const AuthProviderWrapper = props => {
         setIsLoggedIn(true);
         const authToken = await user.getIdToken();
         localStorage.setItem('authToken', authToken);
-        setUser(prevUser => ({ ...prevUser, idToken: authToken }));
+        setUser(prevUser => ({...prevUser, idToken: authToken}));
       }
 
       console.log('User', user);
@@ -105,11 +105,10 @@ const AuthProviderWrapper = props => {
         logOutUser,
         handleGoogleAuthentication,
         isAdmin
-      }}
-    >
+      }}>
       <CartProvider>{props.children}</CartProvider>
     </AuthContext.Provider>
   );
 };
 
-export { AuthContext, AuthProviderWrapper };
+export {AuthContext, AuthProviderWrapper};

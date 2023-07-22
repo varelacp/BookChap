@@ -35,7 +35,6 @@ const AdminDashboard = () => {
       <p>Profile Image: {dashboardData.profileImage}</p>
       <p>Address: {dashboardData.address}</p>
       <p>Phone Number: {dashboardData.phoneNumber}</p>
-      <p>Role: {dashboardData.role}</p>
 
       <Link to='/rentals/active'>Active Rentals</Link>
 
