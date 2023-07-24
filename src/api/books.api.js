@@ -1,4 +1,4 @@
-import { searchBooks, getBookById } from './googleBooks.api';
+import {searchBooks, getBookById} from './googleBooks.api';
 import axios from 'axios';
 const baseURL = `${import.meta.env.VITE_PROJECTS_API}/api`;
 
@@ -9,7 +9,7 @@ const setAuthorizationHeaders = () => {
     const storedToken = localStorage.getItem('authToken');
 
     if (storedToken) {
-      config.headers = { Authorization: `Bearer ${storedToken}` };
+      config.headers = {Authorization: `Bearer ${storedToken}`};
     }
     return config;
   });
@@ -70,7 +70,7 @@ export const upload = uploadData => {
 export const saveBooks = async books => {
   try {
     // Send an HTTP POST request to the `/books/save` endpoint of your backend API
-    const response = await axios.post(`${baseURL}/books/save`, { books });
+    const response = await axios.post(`${baseURL}/books/save`, {books});
     const savedBooks = response.data;
 
     return savedBooks;
@@ -80,4 +80,4 @@ export const saveBooks = async books => {
   }
 };
 
-export { searchBooks, getBookById };
+export {searchBooks, getBookById};

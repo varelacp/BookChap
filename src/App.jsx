@@ -24,110 +24,113 @@ import ActiveRentals from './pages/ActiveRentals';
 import Container from './components/Container';
 import FullWidthLine from './components/UiComponents/FullWidthLine ';
 import Footer from './components/UiComponents/Footer';
+import {SearchProvider} from './context/search.context';
 
 function App() {
   return (
     <IntlProvider locale='en'>
-      <Container>
-        <CartProvider>
-          <div className='App'>
-            <Navbar />
-            <FullWidthLine />
-            <ToastContainer />
+      <SearchProvider>
+        <Container>
+          <CartProvider>
+            <div className='App'>
+              <Navbar />
+              <FullWidthLine />
+              <ToastContainer />
 
-            <Routes>
-              <Route>
-                <Route path='/' element={<Home />} />
-                <Route path='/about' element={<About />} />
-                <Route path='/books' element={<Books />} />
-                <Route
-                  path='/book'
-                  element={
-                    <AdminAuthPrivate>
-                      <AddBook />{' '}
-                    </AdminAuthPrivate>
-                  }
-                />
-                <Route path='/books/:id' element={<BookDetails />} />
-                <Route
-                  path='/books/edit/:id'
-                  element={
-                    <AdminAuthPrivate>
-                      <EditBook />{' '}
-                    </AdminAuthPrivate>
-                  }
-                />
-                <Route
-                  path='/login'
-                  element={
-                    <IsAnon>
-                      <Login />
-                    </IsAnon>
-                  }
-                />
-                <Route
-                  path='/signup'
-                  element={
-                    <IsAnon>
-                      <Signup />
-                    </IsAnon>
-                  }
-                />
-                <Route
-                  path='/user-dashboard'
-                  element={
-                    <UserAuthPrivate>
-                      <UserDashboard />{' '}
-                    </UserAuthPrivate>
-                  }
-                />
-                <Route
-                  path='/admin-dashboard'
-                  element={
-                    <AdminAuthPrivate>
-                      <AdminDashboard />
-                    </AdminAuthPrivate>
-                  }
-                />
-                <Route
-                  path='/rentals/active'
-                  element={
-                    <AdminAuthPrivate>
-                      <ActiveRentals />
-                    </AdminAuthPrivate>
-                  }></Route>
-                <Route
-                  path='/rentals'
-                  element={
-                    <UserAuthPrivate>
-                      <RentBook />
-                    </UserAuthPrivate>
-                  }
-                />
-                <Route
-                  path='/users/:userId/rentals'
-                  element={
-                    <UserAuthPrivate>
-                      {' '}
-                      <UserRentals />{' '}
-                    </UserAuthPrivate>
-                  }
-                />
+              <Routes>
+                <Route>
+                  <Route path='/' element={<Home />} />
+                  <Route path='/about' element={<About />} />
+                  <Route path='/books' element={<Books />} />
+                  <Route
+                    path='/book'
+                    element={
+                      <AdminAuthPrivate>
+                        <AddBook />{' '}
+                      </AdminAuthPrivate>
+                    }
+                  />
+                  <Route path='/books/:id' element={<BookDetails />} />
+                  <Route
+                    path='/books/edit/:id'
+                    element={
+                      <AdminAuthPrivate>
+                        <EditBook />{' '}
+                      </AdminAuthPrivate>
+                    }
+                  />
+                  <Route
+                    path='/login'
+                    element={
+                      <IsAnon>
+                        <Login />
+                      </IsAnon>
+                    }
+                  />
+                  <Route
+                    path='/signup'
+                    element={
+                      <IsAnon>
+                        <Signup />
+                      </IsAnon>
+                    }
+                  />
+                  <Route
+                    path='/user-dashboard'
+                    element={
+                      <UserAuthPrivate>
+                        <UserDashboard />{' '}
+                      </UserAuthPrivate>
+                    }
+                  />
+                  <Route
+                    path='/admin-dashboard'
+                    element={
+                      <AdminAuthPrivate>
+                        <AdminDashboard />
+                      </AdminAuthPrivate>
+                    }
+                  />
+                  <Route
+                    path='/rentals/active'
+                    element={
+                      <AdminAuthPrivate>
+                        <ActiveRentals />
+                      </AdminAuthPrivate>
+                    }></Route>
+                  <Route
+                    path='/rentals'
+                    element={
+                      <UserAuthPrivate>
+                        <RentBook />
+                      </UserAuthPrivate>
+                    }
+                  />
+                  <Route
+                    path='/users/:userId/rentals'
+                    element={
+                      <UserAuthPrivate>
+                        {' '}
+                        <UserRentals />{' '}
+                      </UserAuthPrivate>
+                    }
+                  />
 
-                <Route
-                  path='/cart'
-                  element={
-                    <UserAuthPrivate>
-                      <Cart />
-                    </UserAuthPrivate>
-                  }
-                />
-              </Route>
-            </Routes>
-          </div>
-        </CartProvider>
-      </Container>
-      <Footer />
+                  <Route
+                    path='/cart'
+                    element={
+                      <UserAuthPrivate>
+                        <Cart />
+                      </UserAuthPrivate>
+                    }
+                  />
+                </Route>
+              </Routes>
+            </div>
+          </CartProvider>
+        </Container>
+        <Footer />
+      </SearchProvider>
     </IntlProvider>
   );
 }

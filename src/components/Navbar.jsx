@@ -20,7 +20,10 @@ import {
   Input,
   InputGroup,
   InputRightElement,
-  Image
+  Image,
+  FormControl,
+  FormLabel,
+  FormHelperText
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -29,38 +32,34 @@ import {
   ChevronRightIcon,
   SearchIcon
 } from '@chakra-ui/icons';
-import {NavLink} from 'react-router-dom';
+import {NavLink, useNavigate} from 'react-router-dom';
 import {CartContext} from '../context/CartContext';
 import {AuthContext} from '../context/auth.context';
+import {useSearch} from '../context/search.context';
 
 const Navbar = () => {
   const {itemCount} = useContext(CartContext);
   const {isLoggedIn, logOutUser, isAdmin} = useContext(AuthContext);
   const {isOpen, onToggle} = useDisclosure();
-  const [searchQuery, setSearchQuery] = useState();
+  const {searchTerm, handleSearch} = useSearch();
+  const navigate = useNavigate();
   const [searchResults, setSearchResults] = useState([]);
-  const isISBN = input => {
+  const ISBN = input => {
     return /^(?:\d{10}|\d{13})$/.test(input);
-  };
-
-  const linkColor = useColorModeValue('gray.600', 'gray.200');
-  const linkHoverColor = useColorModeValue('gray.800', 'white');
-
-  const handleSearchChange = event => {
-    setSearchQuery(event.target.value);
-  };
+  }; // check if it is a isbn number 10 or 13
 
   const handleSearchSubmit = async event => {
     event.preventDefault();
     let results;
 
-    if (isISBN(searchQuery)) {
-      results = await searchBookByISBN(searchQuery);
+    if (ISBN(searchTerm)) {
+      results = await searchBookByISBN(searchTerm);
     } else {
-      results = await searchBooksByCategory(searchQuery);
+      results = await searchBooksByCategory(searchTerm);
     }
 
     setSearchResults(results.data);
+    navigate('/books');
   };
 
   const NAV_ITEMS = [
@@ -76,60 +75,7 @@ const Navbar = () => {
       label: 'Books',
       href: '/books'
     }
-    // Add more navigation items as needed
   ];
-
-  const DesktopNav = () => {
-    return (
-      <form onSubmit={handleSearchSubmit}>
-        <Stack direction={'row'} spacing={4}>
-          {NAV_ITEMS.map(navItem => (
-            <Box key={navItem.label}>
-              <Popover trigger={'hover'} placement={'bottom-start'}>
-                <PopoverTrigger>
-                  <Link
-                    as={NavLink}
-                    to={navItem.href}
-                    p={2}
-                    fontSize={'md'}
-                    fontWeight={700}
-                    color={'black'}
-                    _hover={{
-                      textDecoration: 'none',
-                      color: 'orange.400'
-                    }}>
-                    {navItem.label}
-                  </Link>
-                </PopoverTrigger>
-              </Popover>
-            </Box>
-          ))}
-          <Box>
-            <Popover trigger={'hover'} placement={'bottom-start'}>
-              <PopoverTrigger>
-                <InputGroup>
-                  <Input
-                    placeholder='Search by ISBN or Category'
-                    value={searchQuery}
-                    onChange={handleSearchChange}
-                    size='sm'
-                    fontSize={{base: 'xs'}}
-                    width={{base: '100%', md: '300px'}}
-                  />
-                  <InputRightElement>
-                    <button type='submit'>
-                      <SearchIcon color='gray.400' />
-                    </button>
-                  </InputRightElement>
-                </InputGroup>
-              </PopoverTrigger>
-              {/* Add your search functionality here */}
-            </Popover>
-          </Box>
-        </Stack>
-      </form>
-    );
-  };
 
   const MobileNav = () => {
     return (
@@ -182,13 +128,62 @@ const Navbar = () => {
           <Image
             src='https://res.cloudinary.com/dd3f3lrg3/image/upload/v1690147851/logo-bookchap-color_ml1ptm.png'
             alt='bookChap Logo'
-            h={{base: '20px', sm: '30px', md: '40px'}}
+            h={{base: '15px', sm: '20px', md: '35px'}}
             w='auto'
             align='center'
           />
 
           <Flex display={{base: 'none', md: 'flex'}} ml={10}>
-            <DesktopNav />
+            <Stack direction={'row'} spacing={4}>
+              {NAV_ITEMS.map(navItem => (
+                <Box key={navItem.label}>
+                  <Popover trigger={'hover'} placement={'bottom-start'}>
+                    <PopoverTrigger>
+                      <Link
+                        as={NavLink}
+                        to={navItem.href}
+                        p={2}
+                        fontSize={'md'}
+                        fontWeight={700}
+                        color={'gray.900'}
+                        _hover={{
+                          textDecoration: 'none',
+                          color: 'orange.400'
+                        }}>
+                        {navItem.label}
+                      </Link>
+                    </PopoverTrigger>
+                  </Popover>
+                </Box>
+              ))}
+              <Box>
+                <form onSubmit={handleSearchSubmit}>
+                  <FormControl>
+                    <Popover trigger={'hover'} placement={'bottom-start'}>
+                      <PopoverTrigger>
+                        <InputGroup>
+                          <Input
+                            placeholder='Search by ISBN or Category'
+                            size='sm'
+                            fontSize={{base: 'xs'}}
+                            width={{base: '100%', md: '300px'}}
+                            color={'black'}
+                            onChange={handleSearch}
+                            value={searchTerm}
+                          />
+
+                          <InputRightElement>
+                            <button type='submit'>
+                              <SearchIcon color='gray.400' />
+                            </button>
+                          </InputRightElement>
+                        </InputGroup>
+                      </PopoverTrigger>
+                    </Popover>
+                  </FormControl>
+                </form>
+              </Box>
+            </Stack>
           </Flex>
         </Flex>
 

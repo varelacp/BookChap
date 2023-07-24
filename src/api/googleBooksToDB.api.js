@@ -1,5 +1,4 @@
 import axios from 'axios';
-/* import { searchBooksByCategory, searchBookByISBN } from './books.api'; */
 
 const googleBooksAPI = axios.create({
   baseURL: 'https://www.googleapis.com/books/v1/'
