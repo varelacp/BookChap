@@ -4,8 +4,12 @@
   max-height: 100%;
 }
 
+.signUpLink,
+.loginLink {
+  font-weight: 600;
+}
 
-
+/* 
 body {
   margin: 0;
 }
@@ -45,5 +49,4 @@ a {
   color: #fff;
   border-bottom: rgba(255, 255, 255, 0.639) solid 2px;
   padding-bottom: 5px;
-}
-
+}  */

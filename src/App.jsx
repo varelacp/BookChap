@@ -22,6 +22,8 @@ import UserRentals from './pages/UserRentals';
 import {ToastContainer} from 'react-toastify';
 import ActiveRentals from './pages/ActiveRentals';
 import Container from './components/Container';
+import FullWidthLine from './components/UiComponents/FullWidthLine ';
+import Footer from './components/UiComponents/Footer';
 
 function App() {
   return (
@@ -30,7 +32,7 @@ function App() {
         <CartProvider>
           <div className='App'>
             <Navbar />
-
+            <FullWidthLine />
             <ToastContainer />
 
             <Routes>
@@ -125,6 +127,7 @@ function App() {
           </div>
         </CartProvider>
       </Container>
+      <Footer />
     </IntlProvider>
   );
 }

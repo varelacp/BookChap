@@ -286,6 +286,9 @@ import {
 import {getAllBooks} from '../api/books.api';
 import {CartContext} from '../context/CartContext';
 import {FormattedNumber} from 'react-intl';
+import {toast} from 'react-toastify';
+import {AuthContext} from '../context/auth.context';
+import {useNavigate} from 'react-router-dom';
 
 import Carousel from '../components/UiComponents/Carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css'; // import carousel styles
@@ -293,6 +296,8 @@ import 'react-responsive-carousel/lib/styles/carousel.min.css'; // import carous
 const Home = () => {
   const {addToCart} = useContext(CartContext);
   const [groupedBooks, setGroupedBooks] = useState({});
+  const {user} = useContext(AuthContext);
+  const navigate = useNavigate();
 
   useEffect(() => {
     getAllBooks().then(results => {
@@ -306,9 +311,21 @@ const Home = () => {
     });
   }, []);
 
+  // const handleAddToCart = (e, book) => {
+  //   e.preventDefault();
+  //   addToCart(user._id, book._id);
+  // };
+
   const handleAddToCart = (e, book) => {
     e.preventDefault();
-    addToCart(book);
+
+    if (user) {
+      addToCart(user._id, book._id);
+    } else {
+      toast.warn('You need to log in to add books to the cart.');
+
+      navigate('/login');
+    }
   };
 
   const getRentalPrice = category => {
@@ -379,8 +396,10 @@ const Home = () => {
                       <Button
                         fontSize='xs'
                         colorScheme='orange'
+                        bg={'orange.400'}
                         marginTop='20px'
-                        onClick={() => handleAddToCart(book)}>
+                        onClick={e => handleAddToCart(e, book)}
+                        _hover={{bg: 'orange.500'}}>
                         ADD TO CART
                       </Button>
                     </Flex>

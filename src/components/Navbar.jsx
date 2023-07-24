@@ -1,92 +1,3 @@
-// import { NavLink } from 'react-router-dom';
-// import { CartContext } from '../context/CartContext';
-// import { useContext } from 'react';
-// import { AuthContext } from '../context/auth.context';
-
-// const Navbar = () => {
-//   const { itemCount } = useContext(CartContext);
-//   const { isLoggedIn, logOutUser, isAdmin } = useContext(AuthContext);
-
-//   return (
-//     <nav className='Navbar'>
-//       <div>
-//         <NavLink className='navbar-brand' to='/'>
-//           Logo
-//         </NavLink>
-//       </div>
-//       <ul>
-//         <NavLink
-//           to='/'
-//           className={({ isActive }) => (isActive ? 'selected' : '')}
-//         >
-//           Home
-//         </NavLink>
-
-//         <NavLink
-//           to='/about'
-//           className={({ isActive }) => (isActive ? 'selected' : '')}
-//         >
-//           About
-//         </NavLink>
-
-//         <NavLink
-//           to='/books'
-//           className={({ isActive }) => (isActive ? 'selected' : '')}
-//         >
-//           Books
-//         </NavLink>
-
-//         {isLoggedIn && !isAdmin && (
-//   <>
-//     <NavLink
-//       to='/cart'
-//       className={({ isActive }) => (isActive ? 'selected' : '')}
-//     >
-//       Cart ({itemCount})
-//     </NavLink>
-//     <NavLink
-//       to='/user-dashboard'
-//       className={({ isActive }) => (isActive ? 'selected' : '')}
-//     >
-//       User Dashboard
-//     </NavLink>
-//     <button onClick={logOutUser}>Logout</button>
-//   </>
-// )}
-
-// {isLoggedIn && isAdmin && (
-//   <>
-//     <NavLink
-//       to='/admin-dashboard'
-//       className={({ isActive }) => (isActive ? 'selected' : '')}
-//     >
-//       Admin Dashboard
-//     </NavLink>
-//     <button onClick={logOutUser}>Logout</button>
-//   </>
-// )}
-
-//         {!isLoggedIn && (
-//           <>
-//             <NavLink
-//               to='/signup'
-//               className={({ isActive }) => (isActive ? 'selected' : '')}
-//             >
-//               Signup
-//             </NavLink>
-//             <NavLink
-//               to='/login'
-//               className={({ isActive }) => (isActive ? 'selected' : '')}
-//             >
-//               Login
-//             </NavLink>
-//           </>
-//         )}
-//       </ul>
-//     </nav>
-//   );
-// };
-
 // export default Navbar;
 import {useContext, useState} from 'react';
 import {searchBookByISBN, searchBooksByCategory} from '../api/books.api';
@@ -108,7 +19,8 @@ import {
   useDisclosure,
   Input,
   InputGroup,
-  InputRightElement
+  InputRightElement,
+  Image
 } from '@chakra-ui/react';
 import {
   HamburgerIcon,
@@ -179,14 +91,13 @@ const Navbar = () => {
                     as={NavLink}
                     to={navItem.href}
                     p={2}
-                    fontSize={'sm'}
-                    fontWeight={500}
-                    color={linkColor}
+                    fontSize={'md'}
+                    fontWeight={700}
+                    color={'black'}
                     _hover={{
                       textDecoration: 'none',
-                      color: linkHoverColor
-                    }}
-                    activeClassName={'selected'}>
+                      color: 'orange.400'
+                    }}>
                     {navItem.label}
                   </Link>
                 </PopoverTrigger>
@@ -235,8 +146,8 @@ const Navbar = () => {
             display={'block'}
             p={2}
             rounded={'md'}
-            _hover={{bg: ('pink.50', 'gray.900')}}
-            activeClassName={'selected'}>
+            fontWeight={'700'}
+            _hover={{color: 'orange.400'}}>
             {navItem.label}
           </Link>
         ))}
@@ -245,17 +156,15 @@ const Navbar = () => {
   };
 
   return (
-    <Box>
+    <Box mt={'6'}>
       <Flex
-        bg={useColorModeValue('white', 'gray.800')}
-        color={useColorModeValue('gray.600', 'white')}
+        bg={useColorModeValue('white')}
+        color={useColorModeValue('white')}
         minH={'60px'}
         py={{base: 2}}
         px={{base: 4}}
-        borderBottom={1}
-        borderStyle={'solid'}
-        borderColor={useColorModeValue('gray.200', 'gray.900')}
-        align={'center'}>
+        align={'center'}
+        maxWidth='100%'>
         <Flex
           flex={{base: 1, md: 'auto'}}
           ml={{base: -2}}
@@ -270,12 +179,13 @@ const Navbar = () => {
           />
         </Flex>
         <Flex flex={{base: 1}} justify={{base: 'center', md: 'start'}}>
-          <Text
-            textAlign={useBreakpointValue({base: 'center', md: 'left'})}
-            fontFamily={'heading'}
-            color={useColorModeValue('gray.800', 'white')}>
-            Logo
-          </Text>
+          <Image
+            src='https://res.cloudinary.com/dd3f3lrg3/image/upload/v1690147851/logo-bookchap-color_ml1ptm.png'
+            alt='bookChap Logo'
+            h={{base: '20px', sm: '30px', md: '40px'}}
+            w='auto'
+            align='center'
+          />
 
           <Flex display={{base: 'none', md: 'flex'}} ml={10}>
             <DesktopNav />
@@ -293,24 +203,32 @@ const Navbar = () => {
                 as={NavLink}
                 to='/cart'
                 fontSize={'sm'}
-                fontWeight={400}
+                fontWeight={700}
                 variant={'link'}
-                activeClassName={'selected'}>
+                color={'black'}
+                _hover={{color: 'orange.400'}}>
                 Cart ({itemCount})
               </Link>
               <Link
                 as={NavLink}
                 to='/user-dashboard'
                 fontSize={'sm'}
-                fontWeight={400}
+                fontWeight={700}
                 variant={'link'}
-                activeClassName={'selected'}>
+                color={'black'}
+                _hover={{color: 'orange.400'}}>
                 User Dashboard
               </Link>
               <Button
-                fontSize={'sm'}
-                fontWeight={600}
-                variant={'link'}
+                as={'a'}
+                display={{base: 'none', md: 'inline-flex'}}
+                fontSize={'md'}
+                fontWeight={700}
+                color={'white'}
+                bg={'orange.400'}
+                _hover={{
+                  bg: 'orange.500'
+                }}
                 onClick={logOutUser}>
                 Logout
               </Button>
@@ -325,13 +243,20 @@ const Navbar = () => {
                 fontSize={'sm'}
                 fontWeight={400}
                 variant={'link'}
-                activeClassName={'selected'}>
+                color={'black'}
+                _hover={{color: 'orange.400'}}>
                 Admin Dashboard
               </Link>
               <Button
+                as={'a'}
+                display={{base: 'none', md: 'inline-flex'}}
                 fontSize={'sm'}
                 fontWeight={600}
-                variant={'link'}
+                color={'white'}
+                bg={'orange.400'}
+                _hover={{
+                  bg: 'orange.500'
+                }}
                 onClick={logOutUser}>
                 Logout
               </Button>
@@ -347,22 +272,24 @@ const Navbar = () => {
                 spacing={6}>
                 <Button
                   as={'a'}
-                  fontSize={'sm'}
-                  fontWeight={400}
+                  fontSize={'md'}
+                  fontWeight={700}
                   variant={'link'}
-                  href={'/login'}>
+                  href={'/login'}
+                  color={'black'}
+                  _hover={{color: 'orange.400'}}>
                   Login
                 </Button>
                 <Button
                   as={'a'}
                   display={{base: 'none', md: 'inline-flex'}}
-                  fontSize={'sm'}
-                  fontWeight={600}
+                  fontSize={'md'}
+                  fontWeight={700}
                   color={'white'}
                   bg={'orange.400'}
                   href={'/signup'}
                   _hover={{
-                    bg: 'pink.300'
+                    bg: 'orange.500'
                   }}>
                   Signup
                 </Button>
