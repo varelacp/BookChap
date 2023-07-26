@@ -1,16 +1,17 @@
-import {useEffect, useState, useContext} from 'react';
-import {getAdminDashboard} from '../api/users.api';
-import {AuthContext} from '../context/auth.context';
+import {useEffect, useState} from 'react';
+import {getUserDashboard} from '../api/users.api';
+import {Box, Flex, Text, VStack, Icon, Button, Avatar} from '@chakra-ui/react';
+import {FaEnvelope, FaMapMarkerAlt, FaPhoneAlt} from 'react-icons/fa';
+
 import {Link} from 'react-router-dom';
 
-const AdminDashboard = () => {
-  const {logOutUser} = useContext(AuthContext);
+const UserDashboard = () => {
   const [dashboardData, setDashboardData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getAdminDashboard();
+        const response = await getUserDashboard();
         setDashboardData(response.data);
       } catch (error) {
         console.error(error);
@@ -20,27 +21,59 @@ const AdminDashboard = () => {
     fetchData();
   }, []);
 
-  const handleLogout = () => {
-    logOutUser();
-  };
-
   if (!dashboardData) {
-    return <p>Loading...</p>;
+    return <Text>Loading...</Text>;
   }
 
   return (
-    <div>
-      <h1>Welcome, {dashboardData.name}!</h1>
-      <p>Email: {dashboardData.email}</p>
-      <p>Profile Image: {dashboardData.profileImage}</p>
-      <p>Address: {dashboardData.address}</p>
-      <p>Phone Number: {dashboardData.phoneNumber}</p>
-
-      <Link to='/rentals/active'>Active Rentals</Link>
-
-      <button onClick={handleLogout}>Logout</button>
-    </div>
+    <Box
+      mt={20}
+      px={8}
+      py={6}
+      boxShadow='lg'
+      rounded='md'
+      bg='white'
+      maxWidth='2xl'
+      mx='auto'>
+      <VStack spacing={4} alignItems='center' mt={10} mb={10}>
+        <Text fontSize='2xl' fontWeight='bold'>
+          Welcome, {dashboardData.name}!
+        </Text>
+        <Avatar size='2xl' src={dashboardData.profileImage} alt='Profile' />
+        <Flex align='center'>
+          <Icon as={FaEnvelope} mr={2} />
+          <Text>{dashboardData.email}</Text>
+        </Flex>
+        <Flex align='center'>
+          <Icon as={FaMapMarkerAlt} mr={2} />
+          <Text>{dashboardData.address}</Text>
+        </Flex>
+        <Flex align='center'>
+          <Icon as={FaPhoneAlt} mr={2} />
+          <Text>{dashboardData.phoneNumber}</Text>
+        </Flex>
+        <Flex mt={4}>
+          <Button
+            colorScheme='orange'
+            bg={'orange.400'}
+            _hover={{bg: 'orange.500'}}
+            as={Link}
+            to='/rentals/active'
+            mr={2}>
+            Active Rentals
+          </Button>
+          <Button
+            colorScheme='green'
+            bg={'green.400'}
+            _hover={{bg: 'green.500'}}
+            as={Link}
+            to='/user-dashboard-edit'>
+            Edit Profile
+          </Button>
+        </Flex>
+      </VStack>
+    </Box>
   );
 };
 
-export default AdminDashboard;
+export default UserDashboard;

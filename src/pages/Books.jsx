@@ -1,104 +1,4 @@
-// import {Link} from 'react-router-dom';
-// import {useContext, useEffect, useState} from 'react';
-// import {getAllBooks} from '../api/books.api';
-// import {FormattedNumber, IntlProvider} from 'react-intl';
-// import {CartContext, CartProvider} from '../context/CartContext';
-// import {AuthContext} from '../context/auth.context';
-
-// import SearchBar from '../components/SearchBar';
-
-// const Books = () => {
-//   const [mongodbBooks, setMongodbBooks] = useState([]);
-//   const [searchTerm, setSearchTerm] = useState('');
-//   const [filteredBooks, setFilteredBooks] = useState([]);
-//   const {addToCart} = useContext(CartContext);
-//   const {user} = useContext(AuthContext);
-
-//   useEffect(() => {
-//     const fetchBooks = async () => {
-//       try {
-//         const response = await getAllBooks();
-//         const data = response.data;
-//         setMongodbBooks(data);
-//         setFilteredBooks(data);
-//       } catch (error) {
-//         console.log('An error occurred while fetching books:', error);
-//       }
-//     };
-
-//     fetchBooks();
-//   }, []);
-
-//   const handleSearch = term => {
-//     setSearchTerm(term);
-//     const filtered = mongodbBooks.filter(book =>
-//       book.title.toLowerCase().includes(term.toLowerCase())
-//     );
-//     setFilteredBooks(filtered);
-//   };
-
-//   const handleAddToCart = (e, book) => {
-//     e.preventDefault();
-//     addToCart(user._id, book._id);
-//   };
-
-//   const getRentalPrice = category => {
-//     switch (category) {
-//       case 'Fiction':
-//         return 10;
-//       case 'Non-fiction':
-//         return 12;
-//       case 'Science Fiction':
-//         return 15;
-//       case 'Mystery':
-//         return 11;
-//       case 'Romance':
-//         return 9;
-//       case 'Fantasy':
-//         return 14;
-//       case 'Thriller':
-//         return 13;
-//       case 'Travel':
-//         return 8;
-//       default:
-//         return 0;
-//     }
-//   };
-
-//   return (
-//     <CartProvider>
-//       <IntlProvider locale='en'>
-//         <div>
-//           <Link to='/book'>Add Book</Link>
-//           <SearchBar onSearch={handleSearch} />
-//           {/* Render books from MongoDB */}
-//           {(searchTerm === '' ? mongodbBooks : filteredBooks).map(book => (
-//             <div key={book._id}>
-//               {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
-//               <h3>{book.title}</h3>
-//               <button onClick={e => handleAddToCart(e, book)}>
-//                 Add to Cart
-//               </button>
-//               <p>Author: {book.author}</p>
-//               <p>
-//                 Rental Price:{' '}
-//                 <FormattedNumber
-//                   style='currency'
-//                   currency='EUR'
-//                   value={getRentalPrice(book.category)}
-//                 />
-//               </p>
-//               <Link to={`/books/${book._id}`}>Details</Link>
-//             </div>
-//           ))}
-//         </div>
-//       </IntlProvider>
-//     </CartProvider>
-//   );
-// };
-
-// export default Books;
-import {useEffect, useState, useContext} from 'react';
+import {useEffect, useState, useContext, useRef} from 'react';
 import {
   Box,
   Image,
@@ -108,9 +8,7 @@ import {
   VStack,
   Container,
   Flex,
-  Input,
-  InputGroup,
-  InputLeftElement
+  Divider
 } from '@chakra-ui/react';
 import {Search2Icon} from '@chakra-ui/icons';
 import {getAllBooks} from '../api/books.api';
@@ -126,8 +24,10 @@ const Books = () => {
   const [groupedBooks, setGroupedBooks] = useState({});
   const {user} = useContext(AuthContext);
   const navigate = useNavigate();
+  const {searchTerm} = useSearch();
+  const [searchClicked, setSearchClicked] = useState(false);
 
-  const {searchTerm} = useSearch(); // Add this line
+  const resultsRef = useRef(null);
 
   useEffect(() => {
     getAllBooks().then(results => {
@@ -136,7 +36,6 @@ const Books = () => {
           book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           (typeof book.author === 'string' &&
             book.author.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          book.isbn?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           book.category?.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
@@ -147,6 +46,13 @@ const Books = () => {
       setGroupedBooks(grouped);
     });
   }, [searchTerm]);
+
+  useEffect(() => {
+    if (resultsRef.current && searchTerm && searchClicked) {
+      resultsRef.current.scrollIntoView({behavior: 'smooth'});
+      setSearchClicked(false);
+    }
+  }, [groupedBooks]);
 
   const handleAddToCart = (e, book) => {
     e.preventDefault();
@@ -220,65 +126,76 @@ const Books = () => {
           onChange={handleSearch}
         />
       </InputGroup> */}
-      {Object.entries(groupedBooks).map(([category, books]) => (
-        <Box key={category}>
-          <Text fontSize='4xl' fontWeight='bold' mb='4' marginTop='50px'>
-            {category}
-          </Text>
-          <SimpleGrid columns={{base: 1, md: 2, lg: 6}} spacing='5'>
-            {books && books.length > 0 ? (
-              books.map(book => (
-                <VStack key={book._id} spacing={2} align='stretch'>
-                  <Container centerContent>
-                    <Flex direction='column' align='center' justify='center'>
-                      <Image
-                        boxSize='200px'
-                        objectFit='scale-down'
-                        marginTop='40px'
-                        src={book.imgUrl}
-                        alt={book.title}
-                        onClick={() => navigate(`/books/${book._id}`)}
-                        cursor='pointer'
-                      />
-                      <Text
-                        fontSize='md'
-                        fontWeight='bold'
-                        textAlign='center'
-                        marginTop='10px'
-                        isTruncated
-                        noOfLines={1}
-                        w='100%'>
-                        {book.title}
-                      </Text>
-                      <Text fontSize='sm' textAlign='center'>
-                        {book.author}
-                      </Text>
-                      <Text fontWeight='bold' marginTop='20px'>
-                        <FormattedNumber
-                          style='currency'
-                          currency='EUR'
-                          value={getRentalPrice(book)}
+      <Box ref={resultsRef}>
+        {Object.entries(groupedBooks).map(([category, books], index) => (
+          <Box key={category}>
+            <Text fontSize='4xl' fontWeight='bold' mb='4' marginTop='50px'>
+              {category}
+            </Text>
+            <SimpleGrid columns={{base: 1, md: 2, lg: 6}} spacing='5'>
+              {books && books.length > 0 ? (
+                books.map(book => (
+                  <VStack key={book._id} spacing={2} align='stretch'>
+                    <Container centerContent>
+                      <Flex direction='column' align='center' justify='center'>
+                        <Image
+                          boxSize='200px'
+                          objectFit='scale-down'
+                          marginTop='40px'
+                          src={book.imgUrl}
+                          alt={book.title}
+                          onClick={() => navigate(`/books/${book._id}`)}
+                          cursor='pointer'
                         />
-                      </Text>
-                      <Button
-                        fontSize='xs'
-                        colorScheme='orange'
-                        bg={'orange.400'}
-                        marginTop='20px'
-                        onClick={e => handleAddToCart(e, book)}
-                        _hover={{bg: 'orange.500'}}>
-                        ADD TO CART
-                      </Button>
-                    </Flex>
-                  </Container>
-                </VStack>
-              ))
-            ) : (
-              <Text>No books available in this category.</Text>
+                        <Text
+                          fontSize='md'
+                          fontWeight='bold'
+                          textAlign='center'
+                          marginTop='10px'
+                          isTruncated
+                          noOfLines={1}
+                          w='100%'>
+                          {book.title}
+                        </Text>
+                        <Text fontSize='sm' textAlign='center'>
+                          {book.author}
+                        </Text>
+                        <Text fontWeight='bold' marginTop='20px'>
+                          <FormattedNumber
+                            style='currency'
+                            currency='EUR'
+                            value={getRentalPrice(book)}
+                          />
+                        </Text>
+                        <Button
+                          fontSize='xs'
+                          colorScheme='orange'
+                          bg={'orange.400'}
+                          marginTop='20px'
+                          onClick={e => handleAddToCart(e, book)}
+                          _hover={{bg: 'orange.500'}}>
+                          ADD TO CART
+                        </Button>
+                      </Flex>
+                    </Container>
+                  </VStack>
+                ))
+              ) : (
+                <Text>No books available in this category.</Text>
+              )}
+            </SimpleGrid>
+            {index < Object.entries(groupedBooks).length - 1 && (
+              <Divider
+                my={6}
+                mt={20}
+                colorScheme='gray'
+                borderColor='gray.200'
+                borderWidth={1}
+              />
             )}
-          </SimpleGrid>
-        </Box>
-      ))}
+          </Box>
+        ))}
+      </Box>
     </Box>
   );
 };

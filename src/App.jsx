@@ -25,6 +25,8 @@ import Container from './components/Container';
 import FullWidthLine from './components/UiComponents/FullWidthLine ';
 import Footer from './components/UiComponents/Footer';
 import {SearchProvider} from './context/search.context';
+import EditUserProfile from './pages/EditUserProfife';
+import EditAdminProfile from './pages/EditAdminProfile';
 
 function App() {
   return (
@@ -84,10 +86,29 @@ function App() {
                     }
                   />
                   <Route
+                    path='/user-dashboard-edit'
+                    element={
+                      <UserAuthPrivate>
+                        {' '}
+                        <EditUserProfile />{' '}
+                      </UserAuthPrivate>
+                    }
+                  />
+                  <Route
                     path='/admin-dashboard'
                     element={
                       <AdminAuthPrivate>
                         <AdminDashboard />
+                      </AdminAuthPrivate>
+                    }
+                  />
+
+                  <Route
+                    path='/admin-dashboard-edit'
+                    element={
+                      <AdminAuthPrivate>
+                        {' '}
+                        <EditAdminProfile />{' '}
                       </AdminAuthPrivate>
                     }
                   />

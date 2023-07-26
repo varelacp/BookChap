@@ -15,7 +15,7 @@ import {
 // Define your data
 const sections = [
   {
-    title: 'Renting Books',
+    title: '',
     content: [
       'Renting books with bookChap is easy and convenient. Simply browse our collection of books, select the ones you want to rent, and add them to your cart.',
       'Once you have chosen your books, proceed to the checkout page where you can review your selections and provide your rental details.'
@@ -29,9 +29,8 @@ const accordionSection = {
     'Browse our collection and find the book you want to rent.',
     'Add the book to your cart by clicking the "Add to Cart" button.',
     'Review the items in your cart and proceed to the checkout page.',
-    'Provide your rental details, including your name, contact information, and rental duration.',
-    'Confirm your rental and make the payment.',
-    'Once your rental is confirmed, you can pick up the book or have it delivered to your preferred location.'
+    'Provide your rental details, including your name and contact information.',
+    'Once your rental is confirmed, have it delivered to your preferred location.'
   ]
 };
 

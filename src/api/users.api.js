@@ -9,19 +9,31 @@ export const getAdminDashboard = () => {
   return axios.get(`${baseURL}/admin-dashboard`);
 };
 
-export const updateUserProfile = (name, address, phoneNumber) => {
+export const updateUserProfile = ({
+  name,
+  address,
+  phoneNumber,
+  profileImage
+}) => {
   return axios.put(`${baseURL}/user-dashboard-edit`, {
     name,
     address,
-    phoneNumber
+    phoneNumber,
+    profileImage
   });
 };
 
-export const updateAdminProfile = (name, address, phoneNumber) => {
+export const updateAdminProfile = ({
+  name,
+  address,
+  phoneNumber,
+  profileImage
+}) => {
   return axios.put(`${baseURL}/admin-dashboard-edit`, {
     name,
     address,
-    phoneNumber
+    phoneNumber,
+    profileImage
   });
 };
 

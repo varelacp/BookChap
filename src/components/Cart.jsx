@@ -1,47 +1,20 @@
-// import {useContext} from 'react';
-// import {useNavigate} from 'react-router-dom';
-// import {CartContext} from '../context/CartContext';
-
-// const Cart = () => {
-//   const {cartItems, handleRemoveFromCart} = useContext(CartContext);
-//   const navigate = useNavigate();
-
-//   const handleCheckout = () => {
-//     navigate('/rentals');
-//   };
-
-//   return (
-//     <div>
-//       <h1>Cart</h1>
-//       {cartItems.length === 0 ? (
-//         <p>Your cart is empty.</p>
-//       ) : (
-//         <>
-//           <ul>
-//             {cartItems.map((book, index) => (
-//               <li key={index}>
-//                 {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
-//                 <h3>{book.title}</h3>
-//                 <p>Author: {book.author[0]}</p>
-//                 <button onClick={() => handleRemoveFromCart(index)}>
-//                   Remove
-//                 </button>
-//               </li>
-//             ))}
-//           </ul>
-//           <button onClick={handleCheckout}>Proceed to Rent</button>
-//         </>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default Cart;
-
 import {useContext} from 'react';
-import {Link} from 'react-router-dom';
 import {CartContext} from '../context/CartContext';
 import {AuthContext} from '../context/auth.context';
+import {
+  Box,
+  Flex,
+  Heading,
+  HStack,
+  Link,
+  Stack,
+  Image,
+  Text,
+  Button,
+  Divider,
+  useColorModeValue as mode
+} from '@chakra-ui/react';
+import {Link as RouterLink} from 'react-router-dom';
 
 const Cart = () => {
   const {cartItems, removeFromCart, clearCart, itemCount} =
@@ -53,41 +26,116 @@ const Cart = () => {
   };
 
   const handleClearCart = () => {
-    // Ensure that user and user._id exist before calling clearCart.
     if (user && user._id) {
       clearCart(user._id);
     } else {
-      // Handle the situation where user._id is undefined.
       console.log('User is not defined or user._id is not available.');
     }
   };
 
   return (
-    <div>
-      <h1>Cart</h1>
-      {cartItems.length === 0 ? (
-        <p>Your cart is empty.</p>
-      ) : (
-        <>
-          <ul>
-            {cartItems.map(book => (
-              <li key={book._id}>
-                {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
-                <h3>{book.title}</h3>
-                <p>Author: {book.author}</p>
-                <button
-                  onClick={() => handleRemoveFromCart(user._id, book._id)}>
-                  Remove
-                </button>
-              </li>
+    <Box
+      maxW={{
+        base: '3xl',
+        lg: '7xl'
+      }}
+      mx='auto'
+      px={{
+        base: '4',
+        md: '8',
+        lg: '12'
+      }}
+      py={{
+        base: '6',
+        md: '8',
+        lg: '12'
+      }}>
+      <Stack
+        direction={{
+          base: 'column',
+          lg: 'row'
+        }}
+        align={{
+          lg: 'flex-start'
+        }}
+        spacing={{
+          base: '8',
+          md: '16'
+        }}>
+        <Stack
+          spacing={{
+            base: '8',
+            md: '10'
+          }}
+          flex='2'>
+          <Heading fontSize='2xl' fontWeight='extrabold'>
+            My Cart ({itemCount} items)
+          </Heading>
+
+          <Stack spacing='6'>
+            {cartItems.map((book, index) => (
+              <Box key={book._id}>
+                <Flex align='center'>
+                  {book.imgUrl && (
+                    <Image
+                      src={book.imgUrl}
+                      alt={book.title}
+                      boxSize={['100px', '125px', '150px']}
+                      objectFit='contain'
+                    />
+                  )}
+                  <Box ml={3}>
+                    <Flex flexDirection='column' align='flex-start'>
+                      <Heading size='md'>{book.title}</Heading>
+                      <Text>Author: {book.author}</Text>
+                      <Text>Price: €{book.rentalPrice}</Text>
+                      <Button
+                        colorScheme='red'
+                        mt={2}
+                        onClick={() =>
+                          handleRemoveFromCart(user._id, book._id)
+                        }>
+                        Remove
+                      </Button>
+                    </Flex>
+                  </Box>
+                </Flex>
+                {index < cartItems.length - 1 && (
+                  <Divider
+                    mt={6}
+                    mb={2}
+                    borderColor='gray.400'
+                    borderWidth={1}
+                  />
+                )}
+              </Box>
             ))}
-          </ul>
-          <button onClick={handleClearCart}>Clear Cart</button>
-          <Link to='/rentals'>Proceed to Rent</Link>
-        </>
-      )}
-      <p>Item Count: {itemCount}</p>
-    </div>
+            <HStack mt='6' fontWeight='semibold'>
+              <p>or</p>
+              <Link
+                as={RouterLink}
+                to='/'
+                color={mode('orange.400')}
+                onClick={handleClearCart}>
+                Clear Cart
+              </Link>
+            </HStack>
+            <Flex justifyContent='center'>
+              <Button
+                as={RouterLink}
+                to='/rentals'
+                colorScheme='orange'
+                bg={'orange.400'}
+                _hover={{bg: 'orange.500'}}
+                mt='10'
+                maxWidth='200px'>
+                Proceed to Rent
+              </Button>
+            </Flex>
+          </Stack>
+        </Stack>
+      </Stack>
+    </Box>
   );
 };
 
