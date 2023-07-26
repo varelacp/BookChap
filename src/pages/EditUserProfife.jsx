@@ -15,6 +15,8 @@ import {
   updateUserProfile,
   uploadImage
 } from '../api/users.api';
+import {toast} from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
 
 const EditUserProfile = () => {
   const [email, setEmail] = useState('');
@@ -23,6 +25,7 @@ const EditUserProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [errorMessage, setErrorMessage] = useState(undefined);
+  const navigate = useNavigate();
 
   const handleName = e => setName(e.target.value);
   const handleAddress = e => setAddress(e.target.value);
@@ -60,7 +63,8 @@ const EditUserProfile = () => {
     try {
       const user = {name, address, phoneNumber, profileImage};
       await updateUserProfile(user);
-      alert('Profile updated!');
+      toast.success('Profile updated!');
+      navigate('/user-dashboard');
     } catch (error) {
       console.log('Error updating profile', error);
       const errorDescription = error.response.data.message;

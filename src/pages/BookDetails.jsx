@@ -1,58 +1,4 @@
-// import { useState, useEffect } from 'react';
-// import { Link, useParams, useNavigate } from 'react-router-dom';
-
-// import { deleteBook, getBook } from '../api/books.api';
-
-// const BookDetails = () => {
-//   const [book, setBook] = useState(null);
-//   const { id } = useParams();
-//   const navigate = useNavigate();
-
-//   const fetchBook = async () => {
-//     try {
-//       const response = await getBook(id);
-//       setBook(response.data);
-//     } catch (error) {
-//       console.log('Error fetching project', error);
-//     }
-//   };
-
-//   useEffect(() => {
-//     fetchBook(id);
-//   }, [id]);
-
-//   const handleDelete = async () => {
-//     try {
-//       await deleteBook(id);
-//       navigate('/books');
-//     } catch (error) {
-//       console.log('Error deleting the project', error);
-//     }
-//   };
-//   return (
-//     <div className='bookDetails'>
-//       {book && (
-//         <div>
-//           <h1>{book.title}</h1>
-//           {book.imgUrl && <img src={book.imgUrl} alt={book.title} />}
-//           <p>{book.author}</p>
-//           <p>{book.description}</p>
-
-//           <Link to={`/books/edit/${id}`}>
-//             <button>Edit Book</button>
-//           </Link>
-//           <button onClick={handleDelete}>Delete Book</button>
-//         </div>
-//       )}
-
-//       <Link to={`/books`}>Back to Books Page</Link>
-//     </div>
-//   );
-// };
-
-// export default BookDetails;
-
-import {useState, useEffect} from 'react';
+import {useState, useEffect, useContext} from 'react';
 import {
   Box,
   Image,
@@ -62,13 +8,14 @@ import {
   Link as ChakraLink
 } from '@chakra-ui/react';
 import {Link, useParams, useNavigate} from 'react-router-dom';
-
 import {deleteBook, getBook} from '../api/books.api';
+import {AuthContext} from '../context/auth.context';
 
 const BookDetails = () => {
   const [book, setBook] = useState(null);
   const {id} = useParams();
   const navigate = useNavigate();
+  const {user} = useContext(AuthContext);
 
   const fetchBook = async () => {
     try {
@@ -121,31 +68,32 @@ const BookDetails = () => {
             <Text fontSize='md' mt='4' textAlign={'left'}>
               {book.description}
             </Text>
-
-            <Flex
-              direction='column'
-              justifyContent='space-between'
-              alignItems={'flex-start'}
-              mt='4'>
-              <ChakraLink as={Link} to={`/books/edit/${id}`} mt='4'>
+            {user && user.role === 'admin' && (
+              <Flex
+                direction='column'
+                justifyContent='space-between'
+                alignItems={'flex-start'}
+                mt='4'>
+                <ChakraLink as={Link} to={`/books/edit/${id}`} mt='4'>
+                  <Button
+                    fontSize='md'
+                    colorScheme='orange'
+                    bg={'orange.400'}
+                    _hover={{bg: 'orange.500'}}
+                    mt='4'>
+                    EDIT BOOK
+                  </Button>
+                </ChakraLink>
                 <Button
                   fontSize='md'
-                  colorScheme='orange'
-                  bg={'orange.400'}
-                  _hover={{bg: 'orange.500'}}
-                  mt='4'>
-                  EDIT BOOK
+                  colorScheme='red'
+                  mt='4'
+                  onClick={handleDelete}>
+                  DELETE BOOK
                 </Button>
-              </ChakraLink>
-              <Button
-                fontSize='md'
-                colorScheme='red'
-                mt='4'
-                onClick={handleDelete}>
-                DELETE BOOK
-              </Button>
-            </Flex>
-            <ChakraLink as={Link} to='/books' mt='4'>
+              </Flex>
+            )}
+            <ChakraLink as={Link} to='/books' mt='4' color={'orange'}>
               Back to Books Page
             </ChakraLink>
           </Flex>

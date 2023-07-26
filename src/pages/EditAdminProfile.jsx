@@ -15,6 +15,8 @@ import {
   updateAdminProfile,
   uploadImage
 } from '../api/users.api';
+import {toast} from 'react-toastify';
+import {useNavigate} from 'react-router-dom';
 
 const EditAdminProfile = () => {
   const [email, setEmail] = useState('');
@@ -23,6 +25,7 @@ const EditAdminProfile = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [profileImage, setProfileImage] = useState('');
   const [errorMessage, setErrorMessage] = useState(undefined);
+  const navigate = useNavigate();
 
   const handleName = e => setName(e.target.value);
   const handleAddress = e => setAddress(e.target.value);
@@ -60,7 +63,8 @@ const EditAdminProfile = () => {
     try {
       const admin = {name, address, phoneNumber, profileImage};
       await updateAdminProfile(admin);
-      alert('Profile updated!');
+      toast.success('Profile updated!');
+      navigate('/admin-dashboard');
     } catch (error) {
       console.log('Error updating profile', error);
       const errorDescription = error.response.data.message;
@@ -89,7 +93,7 @@ const EditAdminProfile = () => {
       >
         <Stack spacing={4} w={{base: '100%', md: '80%'}}>
           <Heading marginBottom={'40px'} fontSize='2xl'>
-            Admin Profile
+            Your Profile
           </Heading>
           <form onSubmit={handleSubmit}>
             <FormControl id='name'>

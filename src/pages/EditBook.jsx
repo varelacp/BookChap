@@ -108,7 +108,7 @@ const EditBook = () => {
               onClick={handleUpdate}>
               UPDATE BOOK
             </Button>
-            <ChakraLink as={Link} to='/books' mt='4'>
+            <ChakraLink as={Link} to='/books' mt='4' color={'orange'}>
               Back to Books Page
             </ChakraLink>
           </Flex>

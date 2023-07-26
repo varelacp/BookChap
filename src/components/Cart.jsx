@@ -14,6 +14,7 @@ import {
   Divider,
   useColorModeValue as mode
 } from '@chakra-ui/react';
+
 import {Link as RouterLink} from 'react-router-dom';
 
 const Cart = () => {

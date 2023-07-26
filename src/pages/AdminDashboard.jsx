@@ -67,7 +67,7 @@ const UserDashboard = () => {
             bg={'green.400'}
             _hover={{bg: 'green.500'}}
             as={Link}
-            to='/user-dashboard-edit'>
+            to='/admin-dashboard-edit'>
             Edit Profile
           </Button>
         </Flex>

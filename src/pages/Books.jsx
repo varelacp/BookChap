@@ -36,7 +36,8 @@ const Books = () => {
           book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           (typeof book.author === 'string' &&
             book.author.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          book.category?.toLowerCase().includes(searchTerm.toLowerCase())
+          book.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          book.isbn?.toLowerCase().includes(searchTerm.toLowerCase())
       );
 
       const grouped = books.reduce((result, book) => {
@@ -112,20 +113,22 @@ const Books = () => {
           color='white'>
           Find your next extraordinary journey in our captivating Books.
         </Text>
-        <Button colorScheme='orange' mt={5} onClick={() => navigate('/book')}>
-          Add Book
-        </Button>
       </Box>
-      {/* <InputGroup mb='4'>
-        <InputLeftElement pointerEvents='none'>
-          <Search2Icon color='gray.300' />
-        </InputLeftElement>
-        <Input
-          placeholder='Search books...'
-          value={searchTerm}
-          onChange={handleSearch}
-        />
-      </InputGroup> */}
+      <Box>
+        {user && user.role === 'admin' && (
+          <Box mt={20}>
+            <Text fontSize={'xl'} fontWeight={'bold'}>
+              Click the button below to add a New Book
+            </Text>
+            <Button
+              colorScheme='orange'
+              mt={5}
+              onClick={() => navigate('/book')}>
+              Add Book
+            </Button>
+          </Box>
+        )}
+      </Box>
       <Box ref={resultsRef}>
         {Object.entries(groupedBooks).map(([category, books], index) => (
           <Box key={category}>

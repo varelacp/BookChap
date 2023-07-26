@@ -2,7 +2,6 @@ import {useEffect, useState} from 'react';
 import {getUserDashboard} from '../api/users.api';
 import {Box, Flex, Text, VStack, Icon, Button, Avatar} from '@chakra-ui/react';
 import {FaEnvelope, FaMapMarkerAlt, FaPhoneAlt} from 'react-icons/fa';
-
 import {Link} from 'react-router-dom';
 
 const UserDashboard = () => {

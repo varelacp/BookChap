@@ -1,4 +1,3 @@
-// export default Navbar;
 import {useContext, useState} from 'react';
 import {searchBookByISBN, searchBooksByCategory} from '../api/books.api';
 import {
@@ -36,6 +35,7 @@ import {NavLink, useNavigate} from 'react-router-dom';
 import {CartContext} from '../context/CartContext';
 import {AuthContext} from '../context/auth.context';
 import {useSearch} from '../context/search.context';
+import {FaShoppingCart, FaUser} from 'react-icons/fa';
 
 const Navbar = () => {
   const {itemCount} = useContext(CartContext);
@@ -114,7 +114,8 @@ const Navbar = () => {
         <Flex
           flex={{base: 1, md: 'auto'}}
           ml={{base: -2}}
-          display={{base: 'flex', md: 'none'}}>
+          display={{base: 'flex', md: 'none'}}
+          align={'center'}>
           <IconButton
             onClick={onToggle}
             icon={
@@ -124,7 +125,10 @@ const Navbar = () => {
             aria-label={'Toggle Navigation'}
           />
         </Flex>
-        <Flex flex={{base: 1}} justify={{base: 'center', md: 'start'}}>
+        <Flex
+          flex={{base: 1}}
+          justify={{base: 'center', md: 'start'}}
+          align={'center'}>
           <Image
             src='https://res.cloudinary.com/dd3f3lrg3/image/upload/v1690147851/logo-bookchap-color_ml1ptm.png'
             alt='bookChap Logo'
@@ -133,10 +137,10 @@ const Navbar = () => {
             align='center'
           />
 
-          <Flex display={{base: 'none', md: 'flex'}} ml={10}>
-            <Stack direction={'row'} spacing={4}>
+          <Flex display={{base: 'none', md: 'flex'}} ml={10} align={'center'}>
+            <Stack direction={'row'} spacing={6} align={'center'}>
               {NAV_ITEMS.map(navItem => (
-                <Box key={navItem.label}>
+                <Box key={navItem.label} align={'center'}>
                   <Popover trigger={'hover'} placement={'bottom-start'}>
                     <PopoverTrigger>
                       <Link
@@ -156,7 +160,7 @@ const Navbar = () => {
                   </Popover>
                 </Box>
               ))}
-              <Box>
+              <Box align={'center'}>
                 <form onSubmit={handleSearchSubmit}>
                   <FormControl>
                     <Popover trigger={'hover'} placement={'bottom-start'}>
@@ -174,7 +178,7 @@ const Navbar = () => {
 
                           <InputRightElement>
                             <button type='submit'>
-                              <SearchIcon color='gray.400' />
+                              <SearchIcon color='gray.400' mb={'8px'} />
                             </button>
                           </InputRightElement>
                         </InputGroup>
@@ -191,7 +195,8 @@ const Navbar = () => {
           flex={{base: 1, md: 0}}
           justify={'flex-end'}
           direction={'row'}
-          spacing={6}>
+          spacing={6}
+          align={'center'}>
           {isLoggedIn && !isAdmin && (
             <>
               <Link
@@ -202,7 +207,12 @@ const Navbar = () => {
                 variant={'link'}
                 color={'black'}
                 _hover={{color: 'orange.400'}}>
-                Cart ({itemCount})
+                <Stack direction='row' align='center'>
+                  <FaShoppingCart />
+                  <Text>({itemCount})</Text>
+                </Stack>
+
+                {/* Cart ({itemCount}) */}
               </Link>
               <Link
                 as={NavLink}
@@ -212,7 +222,10 @@ const Navbar = () => {
                 variant={'link'}
                 color={'black'}
                 _hover={{color: 'orange.400'}}>
-                User Dashboard
+                <Stack direction='row' align='center'>
+                  <FaUser />
+                  <Text>Client</Text>
+                </Stack>
               </Link>
               <Button
                 as={'a'}
@@ -240,7 +253,10 @@ const Navbar = () => {
                 variant={'link'}
                 color={'black'}
                 _hover={{color: 'orange.400'}}>
-                Admin Dashboard
+                <Stack direction='row' align='center'>
+                  <FaUser />
+                  <Text>Admin</Text>
+                </Stack>
               </Link>
               <Button
                 as={'a'}
@@ -264,7 +280,8 @@ const Navbar = () => {
                 flex={{base: 1, md: 0}}
                 justify={'flex-end'}
                 direction={'row'}
-                spacing={6}>
+                spacing={6}
+                align={'center'}>
                 <Button
                   as={'a'}
                   fontSize={'md'}
