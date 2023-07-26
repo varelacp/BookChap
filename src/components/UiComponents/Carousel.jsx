@@ -91,10 +91,10 @@ const Carousel = () => {
                 alignItems='center'
                 justifyContent='center'>
                 <Box textAlign='center'>
-                  <Text color='white' fontSize='6xl'>
+                  <Text color='white' fontSize='6xl' fontWeight='semibold'>
                     {slide.title}
                   </Text>
-                  <Text color='white' fontSize='xl'>
+                  <Text color='white' fontSize='xl' fontWeight='semibold'>
                     {slide.subtitle}
                   </Text>
                 </Box>

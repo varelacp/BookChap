@@ -7,16 +7,19 @@ import 'react-toastify/dist/ReactToastify.css';
 import {AuthProviderWrapper} from './context/auth.context.jsx';
 import {CartProvider} from './context/CartContext.jsx';
 import {ChakraProvider} from '@chakra-ui/react';
+import {SearchProvider} from './context/search.context.jsx';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
     <Router>
       <AuthProviderWrapper>
-        <CartProvider>
-          <ChakraProvider>
-            <App />
-          </ChakraProvider>
-        </CartProvider>
+        <SearchProvider>
+          <CartProvider>
+            <ChakraProvider>
+              <App />
+            </ChakraProvider>
+          </CartProvider>
+        </SearchProvider>
       </AuthProviderWrapper>
     </Router>
   </React.StrictMode>

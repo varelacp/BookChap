@@ -11,49 +11,28 @@ import {
   Divider
 } from '@chakra-ui/react';
 import {Search2Icon} from '@chakra-ui/icons';
-import {getAllBooks} from '../api/books.api';
 import {CartContext} from '../context/CartContext';
 import {FormattedNumber} from 'react-intl';
 import {toast} from 'react-toastify';
 import {AuthContext} from '../context/auth.context';
 import {useNavigate} from 'react-router-dom';
-import {useSearch} from '../context/search.context';
+import {SearchContext} from '../context/search.context';
 
 const Books = () => {
   const {addToCart} = useContext(CartContext);
-  const [groupedBooks, setGroupedBooks] = useState({});
   const {user} = useContext(AuthContext);
   const navigate = useNavigate();
-  const {searchTerm} = useSearch();
-  const [searchClicked, setSearchClicked] = useState(false);
+  const {searchResults, searchClicked, setSearchClicked} =
+    useContext(SearchContext);
 
   const resultsRef = useRef(null);
 
   useEffect(() => {
-    getAllBooks().then(results => {
-      const books = results.data.filter(
-        book =>
-          book.title?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          (typeof book.author === 'string' &&
-            book.author.toLowerCase().includes(searchTerm.toLowerCase())) ||
-          book.category?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          book.isbn?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-
-      const grouped = books.reduce((result, book) => {
-        (result[book.category] = result[book.category] || []).push(book);
-        return result;
-      }, {});
-      setGroupedBooks(grouped);
-    });
-  }, [searchTerm]);
-
-  useEffect(() => {
-    if (resultsRef.current && searchTerm && searchClicked) {
+    if (resultsRef.current && searchClicked) {
       resultsRef.current.scrollIntoView({behavior: 'smooth'});
       setSearchClicked(false);
     }
-  }, [groupedBooks]);
+  }, [searchClicked, setSearchClicked]);
 
   const handleAddToCart = (e, book) => {
     e.preventDefault();
@@ -108,10 +87,10 @@ const Books = () => {
           top='50%'
           left='50%'
           transform='translate(-50%, -50%)'
-          fontSize='4xl'
-          fontWeight='bold'
+          fontSize='6xl'
+          fontWeight='semibold'
           color='white'>
-          Find your next extraordinary journey in our captivating Books.
+          Explore our Pages
         </Text>
       </Box>
       <Box>
@@ -130,7 +109,7 @@ const Books = () => {
         )}
       </Box>
       <Box ref={resultsRef}>
-        {Object.entries(groupedBooks).map(([category, books], index) => (
+        {Object.entries(searchResults).map(([category, books], index) => (
           <Box key={category}>
             <Text fontSize='4xl' fontWeight='bold' mb='4' marginTop='50px'>
               {category}
@@ -187,7 +166,7 @@ const Books = () => {
                 <Text>No books available in this category.</Text>
               )}
             </SimpleGrid>
-            {index < Object.entries(groupedBooks).length - 1 && (
+            {index < Object.entries(searchResults).length - 1 && (
               <Divider
                 my={6}
                 mt={20}

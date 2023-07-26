@@ -12,6 +12,7 @@ import {
   Link as ChakraLink
 } from '@chakra-ui/react';
 import {getBook, updateBook} from '../api/books.api';
+import {toast} from 'react-toastify';
 
 const EditBook = () => {
   const [book, setBook] = useState(null);
@@ -52,6 +53,7 @@ const EditBook = () => {
   const handleUpdate = async () => {
     try {
       await updateBook(book);
+      toast.success('Profile updated!');
       navigate('/books');
     } catch (error) {
       console.log('Error updating the book:', error);

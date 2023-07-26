@@ -34,32 +34,30 @@ import {
 import {NavLink, useNavigate} from 'react-router-dom';
 import {CartContext} from '../context/CartContext';
 import {AuthContext} from '../context/auth.context';
-import {useSearch} from '../context/search.context';
+import {SearchContext} from '../context/search.context';
 import {FaShoppingCart, FaUser} from 'react-icons/fa';
 
 const Navbar = () => {
   const {itemCount} = useContext(CartContext);
   const {isLoggedIn, logOutUser, isAdmin} = useContext(AuthContext);
+  const {searchTerm, setSearchTerm, handleSearchResults} =
+    useContext(SearchContext);
   const {isOpen, onToggle} = useDisclosure();
-  const {searchTerm, handleSearch} = useSearch();
   const navigate = useNavigate();
-  const [searchResults, setSearchResults] = useState([]);
   const ISBN = input => {
     return /^(?:\d{10}|\d{13})$/.test(input);
   }; // check if it is a isbn number 10 or 13
 
   const handleSearchSubmit = async event => {
     event.preventDefault();
-    let results;
+    handleSearchResults();
+    setSearchTerm('');
 
-    if (ISBN(searchTerm)) {
-      results = await searchBookByISBN(searchTerm);
-    } else {
-      results = await searchBooksByCategory(searchTerm);
-    }
-
-    setSearchResults(results.data);
     navigate('/books');
+  };
+
+  const handleSearchTerm = event => {
+    setSearchTerm(event.target.value);
   };
 
   const NAV_ITEMS = [
@@ -172,7 +170,7 @@ const Navbar = () => {
                             fontSize={{base: 'xs'}}
                             width={{base: '100%', md: '300px'}}
                             color={'black'}
-                            onChange={handleSearch}
+                            onChange={handleSearchTerm}
                             value={searchTerm}
                           />
 
