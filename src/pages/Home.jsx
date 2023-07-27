@@ -62,6 +62,8 @@ const Home = () => {
                     marginTop='40px'
                     src={book.imgUrl}
                     alt={book.title}
+                    onClick={() => navigate(`/books/${book._id}`)}
+                    cursor='pointer'
                   />
                   <Text
                     fontSize='md'

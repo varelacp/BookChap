@@ -70,12 +70,20 @@ Cart
 
 ### Rental Routes
 
-| Method | Route                   | Description                         |
-| ------ | ----------------------- | ----------------------------------- |
-| GET    | /api/rentals/active     | Retrieves all rentals for the admin |
-| GET    | api/users/:userId/rentals  | Retrieves user's rentals            |
-| POST   | /api/rentals            | Rent a New Book                     |
-| PUT    | /api/rentals/:id/return | Return a book by the user           |
+| Method | Route                     | Description                         |
+| ------ | ------------------------- | ----------------------------------- |
+| GET    | /api/rentals/active       | Retrieves all rentals for the admin |
+| GET    | api/users/:userId/rentals | Retrieves user's rentals            |
+| POST   | /api/rentals              | Rent a New Book                     |
+| PUT    | /api/rentals/:id/return   | Return a book by the user           |
+
+### Cart Routes
+
+| Method | Route                       | Description                |
+| ------ | --------------------------- | -------------------------- |
+| POST   | /cart                       | Add items to the Cart      |
+| GET    | /cart/:userId/items         | Retrieves the Cart items   |
+| DELETE | /cart/:userId/items/:bookId | Remove items from the Cart |
 
 ### User Routes
 

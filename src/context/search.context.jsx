@@ -19,7 +19,6 @@ const SearchProvider = ({children}) => {
 
   const getBooks = async () => {
     const response = await getAllBooks();
-    console.log(searchTerm, 'search');
 
     const books = response.data.filter(
       book =>

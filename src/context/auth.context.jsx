@@ -37,7 +37,7 @@ const AuthProviderWrapper = props => {
         localStorage.setItem('authToken', authToken);
       } else {
         const {claims} = await user.getIdTokenResult();
-        console.log('Claims', claims);
+
         setUser({
           _id: user.uid,
           name: claims.name,
@@ -53,8 +53,6 @@ const AuthProviderWrapper = props => {
         localStorage.setItem('authToken', authToken);
         setUser(prevUser => ({...prevUser, idToken: authToken}));
       }
-
-      console.log('User', user);
 
       setIsLoading(false);
     });

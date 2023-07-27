@@ -33,19 +33,6 @@ const RentBook = () => {
         const returnDate = new Date();
         const copy = returnDate;
         copy.setDate(rentalDate.getDate() + rentalDuration);
-        console.log(returnDate);
-        // const rentalDate = new Date(); // Current date
-        // let rentalDurationInMilliseconds = rentalDuration * 24 * 60 * 60 * 1000; // Conversion of days to milliseconds
-        // let returnDateInMilliseconds =
-        //   rentalDate.getTime() + rentalDurationInMilliseconds; // Adding rental duration to the current time
-        // let returnDate = new Date(returnDateInMilliseconds);
-        // let returnDateUTC = new Date(
-        //   Date.UTC(
-        //     returnDate.getFullYear(),
-        //     returnDate.getMonth(),
-        //     returnDate.getDate()
-        //   )
-        // );
 
         await rentBook(
           book._id,

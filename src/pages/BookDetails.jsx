@@ -10,6 +10,7 @@ import {
 import {Link, useParams, useNavigate} from 'react-router-dom';
 import {deleteBook, getBook} from '../api/books.api';
 import {AuthContext} from '../context/auth.context';
+import {toast} from 'react-toastify';
 
 const BookDetails = () => {
   const [book, setBook] = useState(null);
@@ -33,6 +34,7 @@ const BookDetails = () => {
   const handleDelete = async () => {
     try {
       await deleteBook(id);
+      toast.success('Book deleted!');
       navigate('/books');
     } catch (error) {
       console.log('Error deleting the book', error);

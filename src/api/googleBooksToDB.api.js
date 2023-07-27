@@ -12,8 +12,6 @@ export const searchBooks = async (searchQuery, category) => {
       }
     });
 
-    console.log('Google Books API response:', response.data);
-    console.log(response.data.items);
     // Process the response data from the Google Books API
     const books = response.data.items.map(item => {
       const {
@@ -38,8 +36,6 @@ export const searchBooks = async (searchQuery, category) => {
         isbn
       };
     });
-
-    console.log(books);
 
     return books;
   } catch (error) {

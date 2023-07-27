@@ -53,7 +53,7 @@ const EditBook = () => {
   const handleUpdate = async () => {
     try {
       await updateBook(book);
-      toast.success('Profile updated!');
+      toast.success('Book updated successfully!');
       navigate('/books');
     } catch (error) {
       console.log('Error updating the book:', error);

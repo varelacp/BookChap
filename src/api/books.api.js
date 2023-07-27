@@ -41,7 +41,6 @@ export const getBook = id => {
 };
 
 export const addBook = book => {
-  console.log(book);
   book.imgUrl = book.thumbnail;
   book.apiId = book.id;
   return axios.post(`${baseURL}/books`, book);

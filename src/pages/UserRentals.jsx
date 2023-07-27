@@ -25,7 +25,6 @@ const UserRentals = () => {
           const response = await getUserRentals(user._id);
           setRentals(response.data);
         }
-        console.log('Invalid userId:', user._id);
       } catch (error) {
         console.log(error);
       }

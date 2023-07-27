@@ -33,8 +33,6 @@ const ActiveRentals = () => {
     fetchActiveRentals();
   }, []);
 
-  console.log('Active rentals:', activeRentals);
-
   return (
     <Box
       maxW={{

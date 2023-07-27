@@ -6,7 +6,6 @@ export const getActiveRentals = () => {
 };
 
 export const getUserRentals = userId => {
-  console.log(`api user id: ${userId}`);
   return axios.get(`${baseURL}/users/${userId}/rentals`);
 };
 
